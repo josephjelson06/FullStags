@@ -1,0 +1,19 @@
+# Byte / cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# SQLite databases
+data/*.db
+
+# IDE
+.vscode/
+.idea/

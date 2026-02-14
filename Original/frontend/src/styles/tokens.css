@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN TOKENS — Light Mode (default)
+   All pages and components consume ONLY these variables.
+   To change the look of the entire app, edit only this file.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Brand ── */
+  --color-primary: #ea580c;
+  --color-primary-hover: #c2410c;
+  --color-primary-light: rgba(234, 88, 12, 0.08);
+  --color-primary-glow: rgba(234, 88, 12, 0.25);
+
+  /* ── Semantic: Urgency ── */
+  --color-critical: #dc2626;
+  --color-critical-bg: #fef2f2;
+  --color-high: #f97316;
+  --color-high-bg: #fff7ed;
+  --color-standard: #2563eb;
+  --color-standard-bg: #eff6ff;
+
+  /* ── Semantic: Status ── */
+  --color-matching: #2563eb;
+  --color-matching-bg: #eff6ff;
+  --color-pending-acceptance: #f59e0b;
+  --color-pending-acceptance-bg: #fffbeb;
+  --color-picking: #f97316;
+  --color-picking-bg: #fff7ed;
+  --color-courier-to-supplier: #7c3aed;
+  --color-courier-to-supplier-bg: #f5f3ff;
+  --color-courier-to-factory: #0ea5e9;
+  --color-courier-to-factory-bg: #f0f9ff;
+  --color-delivered: #16a34a;
+  --color-delivered-bg: #f0fdf4;
+
+  /* ── Semantic: Feedback ── */
+  --color-success: #16a34a;
+  --color-success-bg: #f0fdf4;
+  --color-warning: #f59e0b;
+  --color-warning-bg: #fffbeb;
+  --color-info: #0ea5e9;
+  --color-info-bg: #f0f9ff;
+  --color-danger: #dc2626;
+  --color-danger-bg: #fef2f2;
+
+  /* ── Surfaces ── */
+  --color-bg: #f1f5f9;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-surface-hover: #f8fafc;
+  --color-surface-inset: #f1f5f9;
+
+  /* ── Borders ── */
+  --color-border: #e2e8f0;
+  --color-border-light: #f1f5f9;
+  --color-border-hover: #cbd5e1;
+
+  /* ── Text ── */
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94a3b8;
+  --color-text-inverse: #ffffff;
+  --color-text-on-primary: #ffffff;
+
+  /* ── Roles ── */
+  --color-role-buyer: #2563eb;
+  --color-role-buyer-bg: #eff6ff;
+  --color-role-supplier: #16a34a;
+  --color-role-supplier-bg: #f0fdf4;
+  --color-role-admin: #7c3aed;
+  --color-role-admin-bg: #f5f3ff;
+
+  /* ── Typography ── */
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* ── Radii ── */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+  --shadow-glow: 0 0 0 3px var(--color-primary-glow);
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+
+  /* ── Gradients ── */
+  --gradient-primary: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+  --gradient-surface: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 100%);
+  --gradient-hero: linear-gradient(135deg, #ea580c 0%, #c2410c 50%, #9a3412 100%);
+
+  /* ── Spacing (for reference; Tailwind handles most) ── */
+  --header-height: 4rem;
+  --sidebar-width: 16rem;
+
+  /* ── Transitions ── */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN TOKENS — Dark Mode
+   Mirrors every light-mode variable for 1:1 parity.
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: #f97316;
+    --color-primary-hover: #fb923c;
+    --color-primary-light: rgba(249, 115, 22, 0.12);
+    --color-primary-glow: rgba(249, 115, 22, 0.3);
+
+    --color-critical-bg: rgba(220, 38, 38, 0.12);
+    --color-high-bg: rgba(249, 115, 22, 0.12);
+    --color-standard-bg: rgba(37, 99, 235, 0.12);
+
+    --color-matching-bg: rgba(37, 99, 235, 0.12);
+    --color-pending-acceptance-bg: rgba(245, 158, 11, 0.12);
+    --color-picking-bg: rgba(249, 115, 22, 0.12);
+    --color-courier-to-supplier-bg: rgba(124, 58, 237, 0.12);
+    --color-courier-to-factory-bg: rgba(14, 165, 233, 0.12);
+    --color-delivered-bg: rgba(22, 163, 74, 0.12);
+
+    --color-success-bg: rgba(22, 163, 74, 0.12);
+    --color-warning-bg: rgba(245, 158, 11, 0.12);
+    --color-info-bg: rgba(14, 165, 233, 0.12);
+    --color-danger-bg: rgba(220, 38, 38, 0.12);
+
+    --color-bg: #0c1222;
+    --color-surface: #1a2332;
+    --color-surface-elevated: #213043;
+    --color-surface-hover: #253548;
+    --color-surface-inset: #0f1a2b;
+
+    --color-border: #2a3a4e;
+    --color-border-light: #1e2d3f;
+    --color-border-hover: #3a4f66;
+
+    --color-text-primary: #f1f5f9;
+    --color-text-secondary: #94a3b8;
+    --color-text-muted: #64748b;
+    --color-text-inverse: #0f172a;
+    --color-text-on-primary: #ffffff;
+
+    --color-role-buyer-bg: rgba(37, 99, 235, 0.12);
+    --color-role-supplier-bg: rgba(22, 163, 74, 0.12);
+    --color-role-admin-bg: rgba(124, 58, 237, 0.12);
+
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.35), 0 4px 6px -4px rgba(0, 0, 0, 0.25);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+
+    --gradient-surface: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 100%);
+  }
+}
