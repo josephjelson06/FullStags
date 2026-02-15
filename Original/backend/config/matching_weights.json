@@ -1,0 +1,20 @@
+{
+  "standard": {
+    "distance": 0.2,
+    "reliability": 0.25,
+    "price": 0.35,
+    "urgency": 0.2
+  },
+  "urgent": {
+    "distance": 0.3,
+    "reliability": 0.25,
+    "price": 0.15,
+    "urgency": 0.3
+  },
+  "critical": {
+    "distance": 0.35,
+    "reliability": 0.2,
+    "price": 0.1,
+    "urgency": 0.35
+  }
+}
