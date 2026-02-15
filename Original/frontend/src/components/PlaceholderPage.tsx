@@ -24,8 +24,8 @@ export function PlaceholderPage({ title, description, module, moduleColor }: Pla
   return (
     <div className="animate-fade-in flex flex-col items-center justify-center py-20 text-center">
       <div
-        className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl"
-        style={{ background: `color-mix(in srgb, ${color} 12%, transparent)`, color }}
+        className="mb-8 flex h-16 w-16 items-center justify-center rounded-xl border"
+        style={{ background: 'var(--color-surface-inset)', borderColor: 'var(--color-border)', color }}
       >
         <Construction size={28} />
       </div>
@@ -41,13 +41,12 @@ export function PlaceholderPage({ title, description, module, moduleColor }: Pla
         Module: {module}
       </span>
 
-      <h1 className="text-2xl font-bold tracking-tight text-text-primary">{title}</h1>
-      <p className="mt-2 max-w-md text-sm leading-relaxed text-text-secondary">{description}</p>
+      <h1 className="text-3xl font-bold tracking-tight text-text-primary">{title}</h1>
+      <p className="mt-2 max-w-xl text-base leading-relaxed text-text-secondary">{description}</p>
 
       <div
-        className="mt-8 rounded-xl border border-dashed px-6 py-3 text-xs font-medium"
+        className="mt-12 surface-card rounded-xl border-dashed px-10 py-4 text-sm italic"
         style={{
-          borderColor: 'var(--color-border)',
           color: 'var(--color-text-muted)',
         }}
       >

@@ -15,9 +15,9 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
   return (
     <div
       className="animate-fade-in fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: 'rgba(0, 0, 0, 0.5)', backdropFilter: 'blur(4px)' }}
+      style={{ background: 'rgba(0, 0, 0, 0.4)', backdropFilter: 'blur(2px)' }}
     >
-      <section className="animate-scale-in w-full max-w-lg rounded-2xl border border-border bg-surface shadow-xl">
+      <section className="animate-scale-in surface-card w-full max-w-lg rounded-2xl shadow-xl">
         <header className="flex items-center justify-between border-b border-border px-5 py-4">
           <h2 className="text-lg font-bold text-text-primary">{title}</h2>
           <button

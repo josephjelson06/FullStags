@@ -5,7 +5,7 @@ import { Sidebar } from '@/layouts/Sidebar';
 
 export function AppLayout() {
   return (
-    <div className="flex min-h-screen" style={{ background: 'var(--color-bg)' }}>
+    <div className="flex min-h-screen transition-colors duration-300" style={{ background: 'var(--color-bg)' }}>
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
         <Header />

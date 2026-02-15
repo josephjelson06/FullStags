@@ -97,21 +97,21 @@ button:active:not(:disabled) {
    ═══════════════════════════════════ */
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--color-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-text-muted);
-  border-radius: 3px;
+  background: var(--color-border);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-secondary);
+  background: var(--color-border-hover);
 }
 
 /* ═══════════════════════════════════
@@ -205,3 +205,46 @@ button:active:not(:disabled) {
 .stagger-children > *:nth-child(8)  { animation-delay: 350ms; }
 .stagger-children > *:nth-child(9)  { animation-delay: 400ms; }
 .stagger-children > *:nth-child(10) { animation-delay: 450ms; }
+
+/* ═══════════════════════════════════
+   Ideal-Frontend Design Utilities
+   ═══════════════════════════════════ */
+
+/* Surface card */
+.surface-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+/* Glow effects */
+.glow-orange { box-shadow: 0 0 15px rgba(255, 107, 0, 0.2); }
+.glow-blue   { box-shadow: 0 0 15px rgba(0, 123, 255, 0.2); }
+.glow-red    { box-shadow: 0 0 20px rgba(239, 68, 68, 0.1); }
+
+/* Urgent gradient */
+.urgent-gradient {
+  background: linear-gradient(135deg, #FF6B00 0%, #CC5500 100%);
+}
+
+/* Pulse danger animation */
+@keyframes pulse-red {
+  0%   { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  70%  { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+.pulse-danger { animation: pulse-red 2s infinite; }
+
+/* Bounce-in animation */
+@keyframes bounce-in {
+  0%   { transform: translateY(100px); opacity: 0; scale: 0.9; }
+  70%  { transform: translateY(-10px); opacity: 1; scale: 1.05; }
+  100% { transform: translateY(0); opacity: 1; scale: 1; }
+}
+.animate-bounce-in {
+  animation: bounce-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Scrollbar hide utility */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+

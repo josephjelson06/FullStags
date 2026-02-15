@@ -228,10 +228,10 @@ export function Sidebar() {
       <aside
         className={`${
           isOpen ? 'translate-x-0' : '-translate-x-full'
-        } fixed inset-y-0 left-0 z-20 flex w-64 flex-col border-r transition-transform md:static md:translate-x-0`}
+        } fixed inset-y-0 left-0 z-20 flex w-64 flex-col border-r transition-all duration-300 md:static md:translate-x-0`}
         style={{
           borderColor: 'var(--color-border)',
-          background: 'var(--color-surface)',
+          background: 'var(--color-bg)',
         }}
       >
         <nav className="mt-14 flex-1 space-y-4 overflow-y-auto px-3 pb-6 md:mt-4">
@@ -253,20 +253,32 @@ export function Sidebar() {
                       to={item.path}
                       onClick={() => setIsOpen(false)}
                       className={({ isActive }) =>
-                        `group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium transition-all ${
+                        `group relative flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-bold transition-all ${
                           isActive
-                            ? 'bg-primary-light text-primary shadow-xs'
+                            ? 'text-text-primary'
                             : 'text-text-secondary hover:bg-surface-hover hover:text-text-primary'
                         }`
                       }
-                      style={({ isActive }) =>
-                        isActive
-                          ? { borderLeft: '3px solid var(--color-primary)' }
-                          : { borderLeft: '3px solid transparent' }
-                      }
                     >
-                      <Icon size={16} className="shrink-0" />
-                      {item.label}
+                      {({ isActive }) => (
+                        <>
+                          {isActive && (
+                            <div
+                              className="absolute left-[-12px] top-1/2 h-5 w-1 -translate-y-1/2 rounded-r"
+                              style={{
+                                background: 'var(--color-primary)',
+                                boxShadow: '0 0 10px rgba(255, 107, 0, 0.8)',
+                              }}
+                            />
+                          )}
+                          <Icon
+                            size={16}
+                            className="shrink-0"
+                            style={isActive ? { color: 'var(--color-primary)' } : undefined}
+                          />
+                          {item.label}
+                        </>
+                      )}
                     </NavLink>
                   );
                 })}

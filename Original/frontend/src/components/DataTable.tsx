@@ -44,7 +44,7 @@ export function DataTable<T>({
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+    <div className="surface-card overflow-hidden rounded-2xl shadow-sm">
       <div className="overflow-x-auto">
         <table className="min-w-full">
           <thead>
@@ -52,7 +52,7 @@ export function DataTable<T>({
               {columns.map((column) => (
                 <th
                   key={column.header}
-                  className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-text-muted"
+                  className="px-6 py-4 text-left text-[10px] font-bold uppercase tracking-widest text-text-muted"
                 >
                   {column.header}
                 </th>
@@ -63,13 +63,13 @@ export function DataTable<T>({
             {data.map((row, rowIndex) => (
               <tr
                 key={rowKey(row)}
-                className="group border-b border-border-light transition-colors last:border-0 hover:bg-surface-hover"
+                className="group border-b border-border-light transition-all last:border-0 hover:bg-surface-hover"
                 style={{ animationDelay: `${rowIndex * 30}ms` }}
               >
                 {columns.map((column) => (
                   <td
                     key={column.header}
-                    className={`px-4 py-3.5 text-sm text-text-primary ${column.className ?? ''}`}
+                    className={`px-6 py-4 text-sm text-text-primary ${column.className ?? ''}`}
                   >
                     {column.render(row)}
                   </td>

@@ -45,93 +45,127 @@ export function LoginPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-4 py-12"
-          style={{ background: 'var(--color-bg)' }}>
-      <div className="animate-scale-in flex w-full max-w-4xl overflow-hidden rounded-2xl shadow-xl"
-           style={{
-             border: '1px solid var(--color-border)',
-             background: 'var(--color-surface)',
-           }}>
+    <main className="flex min-h-screen" style={{ background: 'var(--color-bg)' }}>
+      {/* Left: Feature Panel */}
+      <div
+        className="hidden w-1/2 flex-col justify-center p-20 relative overflow-hidden md:flex"
+        style={{ background: 'var(--color-surface-elevated)' }}
+      >
+        <div
+          className="absolute top-[-20%] left-[-20%] w-[100%] h-[100%] rounded-full pointer-events-none"
+          style={{ background: 'rgba(255, 107, 0, 0.1)', filter: 'blur(120px)' }}
+        />
 
-        {/* Left: Branding Panel */}
-        <div className="hidden w-[45%] flex-col justify-between p-10 md:flex"
-             style={{
-               background: 'var(--gradient-hero)',
-               color: '#ffffff',
-             }}>
-          <div>
-            <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.2em]"
-                 style={{ opacity: 0.9 }}>
-              <span className="animate-pulse-dot inline-block h-2 w-2 rounded-full bg-white" />
-              UrgentParts
+        <div className="relative z-10 max-w-lg">
+          <div className="flex items-center gap-3 mb-12">
+            <div
+              className="flex h-10 w-10 items-center justify-center rounded font-bold text-white"
+              style={{
+                background: 'var(--color-primary)',
+                boxShadow: '0 0 20px rgba(255, 107, 0, 0.6)',
+              }}
+            >
+              UP
             </div>
-            <h2 className="mt-8 text-3xl font-bold leading-tight">
-              When the line stops,<br />we start.
-            </h2>
-            <p className="mt-4 text-sm leading-relaxed" style={{ opacity: 0.85 }}>
-              Emergency industrial parts matching — connecting factories with the nearest
-              available supplier in minutes, not hours.
-            </p>
+            <span className="text-3xl font-bold tracking-tighter text-text-primary">
+              URGENT<span style={{ color: 'var(--color-primary)' }}>PARTS</span>
+            </span>
           </div>
 
-          <div className="space-y-3">
+          <h2 className="text-5xl font-bold leading-tight mb-6 text-text-primary">
+            When the line stops,<br />
+            <span style={{ color: 'var(--color-primary)' }}>we start.</span>
+          </h2>
+          <p className="text-xl leading-relaxed mb-12 text-text-secondary">
+            Proprietary matching engine connecting mission-critical factories with the
+            nearest available precision parts in real-time.
+          </p>
+
+          <div className="space-y-6">
             {[
-              { icon: '⚡', text: 'Real-time supplier matching' },
-              { icon: '📍', text: 'Optimized delivery routing' },
-              { icon: '💰', text: '$25,000/hr downtime savings' },
+              { icon: '⚡', text: 'Real-time supplier matching & dynamic weight routing' },
+              { icon: '🛡️', text: 'Full chain of custody & mission-critical verification' },
+              { icon: '📈', text: '₹2,00,000/hr downtime saved per deployment' },
             ].map((item) => (
-              <div key={item.text} className="flex items-center gap-3 text-sm" style={{ opacity: 0.85 }}>
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg"
-                      style={{ background: 'rgba(255,255,255,0.15)' }}>{item.icon}</span>
-                {item.text}
+              <div key={item.text} className="flex items-center gap-4 group">
+                <div
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg transition-transform group-hover:scale-110"
+                  style={{ background: 'var(--color-primary-light)' }}
+                >
+                  {item.icon}
+                </div>
+                <span className="text-lg font-medium text-text-secondary">{item.text}</span>
               </div>
             ))}
           </div>
         </div>
+      </div>
 
-        {/* Right: Login Form */}
-        <div className="flex w-full flex-col justify-center p-8 md:w-[55%] md:p-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] md:hidden"
-             style={{ color: 'var(--color-primary)' }}>
-            UrgentParts
-          </p>
-          <h1 className="mt-2 text-2xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
-            Sign in to your account
-          </h1>
-          <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-            Dispatch emergency parts in minutes.
-          </p>
+      {/* Right: Login Form */}
+      <div
+        className="flex w-full flex-col items-center justify-center p-8 md:w-1/2"
+        style={{ background: 'var(--color-bg)' }}
+      >
+        <div className="w-full max-w-md space-y-8">
+          <div>
+            <h1 className="text-3xl font-bold text-text-primary mb-2">System Login</h1>
+            <p className="text-text-muted">Access your command center and dispatch parts.</p>
+          </div>
 
-          <form className="mt-6 space-y-4" onSubmit={onSubmit}>
+          <form className="space-y-6" onSubmit={onSubmit}>
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-text-primary" htmlFor="login-email">Email</label>
+              <label
+                className="mb-2 block text-sm font-medium text-text-muted"
+                htmlFor="login-email"
+              >
+                Email Address
+              </label>
               <input
                 id="login-email"
                 type="email"
-                className="w-full"
+                className="w-full rounded-lg px-4 py-3 text-sm font-medium transition-all"
+                style={{
+                  background: 'var(--color-surface)',
+                  border: '1px solid var(--color-border)',
+                  color: 'var(--color-text-primary)',
+                }}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder="commander@factory.com"
                 required
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-text-primary" htmlFor="login-password">Password</label>
+              <label
+                className="mb-2 block text-sm font-medium text-text-muted"
+                htmlFor="login-password"
+              >
+                Access Token
+              </label>
               <input
                 id="login-password"
                 type="password"
-                className="w-full"
+                className="w-full rounded-lg px-4 py-3 text-sm font-medium transition-all"
+                style={{
+                  background: 'var(--color-surface)',
+                  border: '1px solid var(--color-border)',
+                  color: 'var(--color-text-primary)',
+                }}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
                 required
               />
             </div>
 
             {error ? (
-              <p className="rounded-lg px-3 py-2 text-sm font-medium"
-                 style={{
-                   background: 'var(--color-danger-bg)',
-                   color: 'var(--color-danger)',
-                 }}>
+              <p
+                className="rounded-lg px-3 py-2 text-sm font-medium"
+                style={{
+                  background: 'var(--color-danger-bg)',
+                  color: 'var(--color-danger)',
+                }}
+              >
                 {error}
               </p>
             ) : null}
@@ -139,53 +173,52 @@ export function LoginPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full rounded-xl px-4 py-2.5 text-sm font-semibold shadow-sm transition-all hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
+              className="flex w-full items-center justify-center gap-2 rounded-lg py-3 text-sm font-bold text-white transition-all active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
               style={{
-                background: 'var(--gradient-primary)',
-                color: 'var(--color-text-on-primary)',
+                background: 'var(--color-primary)',
+                boxShadow: '0 0 15px rgba(255, 107, 0, 0.4)',
               }}
             >
-              {submitting ? 'Signing in...' : 'Sign In'}
+              {submitting ? 'Authorizing...' : 'Authorize Access →'}
             </button>
           </form>
 
-          {/* Demo Credentials */}
-          <div className="mt-6 rounded-xl p-4"
-               style={{
-                 background: 'var(--color-surface-inset)',
-                 border: '1px solid var(--color-border)',
-               }}>
-            <p className="mb-3 text-[10px] font-semibold uppercase tracking-widest"
-               style={{ color: 'var(--color-text-muted)' }}>
-              Quick Login — Demo Accounts
-            </p>
-            <div className="space-y-1.5">
-              {DEMO_ACCOUNTS.map((account) => (
-                <button
-                  key={account.role}
-                  type="button"
-                  onClick={() => fillCredentials(account.email, account.password)}
-                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-all hover:shadow-xs"
-                  style={{
-                    background: 'var(--color-surface)',
-                    border: '1px solid var(--color-border)',
-                    color: 'var(--color-text-primary)',
-                  }}
-                >
-                  <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: account.color }} />
-                  <span className="font-semibold">{account.role}</span>
-                  <span className="ml-auto text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                    {account.email}
-                  </span>
-                </button>
-              ))}
+          {/* Demo Quick Login */}
+          <div className="relative py-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full" style={{ borderTop: '1px solid var(--color-border)' }} />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span
+                className="px-2 text-text-muted"
+                style={{ background: 'var(--color-bg)' }}
+              >
+                DEMO QUICK LOGIN
+              </span>
             </div>
           </div>
 
-          <p className="mt-5 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+          <div className="grid grid-cols-3 gap-4">
+            {DEMO_ACCOUNTS.map((account) => (
+              <button
+                key={account.role}
+                type="button"
+                onClick={() => fillCredentials(account.email, account.password)}
+                className="surface-card rounded-lg p-3 text-xs font-bold transition-all hover:bg-surface-hover"
+                style={{ color: account.color }}
+              >
+                {account.role.toUpperCase()}
+              </button>
+            ))}
+          </div>
+
+          <p className="mt-5 text-sm text-text-secondary">
             Need an account?{' '}
-            <Link to="/signup" className="font-semibold hover:underline"
-                  style={{ color: 'var(--color-primary)' }}>
+            <Link
+              to="/signup"
+              className="font-semibold hover:underline"
+              style={{ color: 'var(--color-primary)' }}
+            >
               Create one
             </Link>
           </p>
