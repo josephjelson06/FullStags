@@ -84,7 +84,9 @@ async def list_notifications(
     )
 
 
-@notifications_router.patch("/{notification_id}/read", response_model=NotificationResponse)
+@notifications_router.patch(
+    "/{notification_id}/read", response_model=NotificationResponse
+)
 async def mark_notification_read(
     notification_id: int,
     current_user: User = Depends(get_current_user),
@@ -98,7 +100,9 @@ async def mark_notification_read(
     )
     notification = result.scalar_one_or_none()
     if notification is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Notification not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Notification not found"
+        )
 
     notification.is_read = True
     await db.commit()
@@ -135,7 +139,11 @@ async def unread_count(
     return UnreadCountResponse(count=count)
 
 
-@events_router.get("/", response_model=EventLogListResponse, dependencies=[Depends(RoleChecker(["admin"]))])
+@events_router.get(
+    "/",
+    response_model=EventLogListResponse,
+    dependencies=[Depends(RoleChecker(["admin"]))],
+)
 async def list_event_logs(
     event_type: str | None = Query(default=None),
     entity_type: str | None = Query(default=None),
@@ -187,14 +195,24 @@ async def list_event_logs(
     dependencies=[Depends(RoleChecker(["admin"]))],
 )
 async def get_test_context(db: AsyncSession = Depends(get_db)):
-    users_result = await db.execute(select(User).order_by(User.role.asc(), User.id.asc()))
+    users_result = await db.execute(
+        select(User).order_by(User.role.asc(), User.id.asc())
+    )
     users = users_result.scalars().all()
 
-    buyer_profiles_result = await db.execute(select(BuyerProfile.user_id, BuyerProfile.id))
-    buyer_profiles_map = {int(row[0]): int(row[1]) for row in buyer_profiles_result.all()}
+    buyer_profiles_result = await db.execute(
+        select(BuyerProfile.user_id, BuyerProfile.id)
+    )
+    buyer_profiles_map = {
+        int(row[0]): int(row[1]) for row in buyer_profiles_result.all()
+    }
 
-    supplier_profiles_result = await db.execute(select(SupplierProfile.user_id, SupplierProfile.id))
-    supplier_profiles_map = {int(row[0]): int(row[1]) for row in supplier_profiles_result.all()}
+    supplier_profiles_result = await db.execute(
+        select(SupplierProfile.user_id, SupplierProfile.id)
+    )
+    supplier_profiles_map = {
+        int(row[0]): int(row[1]) for row in supplier_profiles_result.all()
+    }
 
     context_users = [
         EventTestContextUser(
@@ -340,7 +358,9 @@ async def get_test_context(db: AsyncSession = Depends(get_db)):
         },
     }
 
-    return EventTestContextResponse(users=context_users, sample_event_templates=templates)
+    return EventTestContextResponse(
+        users=context_users, sample_event_templates=templates
+    )
 
 
 @events_router.post(
@@ -348,10 +368,14 @@ async def get_test_context(db: AsyncSession = Depends(get_db)):
     response_model=EventTestEmitResponse,
     dependencies=[Depends(RoleChecker(["admin"]))],
 )
-async def test_emit_event(payload: EventTestEmitRequest, db: AsyncSession = Depends(get_db)):
+async def test_emit_event(
+    payload: EventTestEmitRequest, db: AsyncSession = Depends(get_db)
+):
     requested_targets = sorted({uid for uid in payload.target_user_ids if uid > 0})
     if requested_targets:
-        valid_result = await db.execute(select(User.id).where(User.id.in_(requested_targets)))
+        valid_result = await db.execute(
+            select(User.id).where(User.id.in_(requested_targets))
+        )
         valid_ids = {int(row[0]) for row in valid_result.all()}
         missing = sorted(set(requested_targets) - valid_ids)
         if missing:
@@ -395,7 +419,9 @@ async def test_order_lifecycle(payload: EventLifecycleTestRequest):
         ("ORDER_DISPATCHED", base_payload),
     ]
     if payload.include_eta_update:
-        ordered_events.append(("ETA_UPDATED", {**base_payload, "eta": "2026-02-15T13:30:00Z"}))
+        ordered_events.append(
+            ("ETA_UPDATED", {**base_payload, "eta": "2026-02-15T13:30:00Z"})
+        )
     ordered_events.append(("ORDER_IN_TRANSIT", base_payload))
 
     if payload.include_order_cancelled:
@@ -413,6 +439,63 @@ async def test_order_lifecycle(payload: EventLifecycleTestRequest):
     return EventLifecycleTestResponse(emitted_events=emitted_events, results=results)
 
 
+# ── Notification Templates ──────────────────────────────────────────────────
+templates_router = APIRouter(
+    prefix="/api/notifications/templates", tags=["notification-templates"]
+)
+
+
+@templates_router.get("/")
+async def list_templates(db: AsyncSession = Depends(get_db)):
+    from backend.models.events import NotificationTemplate
+
+    result = await db.execute(
+        select(NotificationTemplate).order_by(NotificationTemplate.id.asc())
+    )
+    templates = result.scalars().all()
+    return [
+        {
+            "id": t.id,
+            "name": t.name,
+            "type": t.event_type,
+            "subject": t.subject,
+            "body": t.body,
+            "is_active": t.is_active,
+            "created_at": t.created_at.isoformat() if t.created_at else None,
+        }
+        for t in templates
+    ]
+
+
+@templates_router.post("/", status_code=201)
+async def create_template(
+    payload: dict,
+    db: AsyncSession = Depends(get_db),
+    _: User = Depends(get_current_user),
+):
+    from backend.models.events import NotificationTemplate
+
+    template = NotificationTemplate(
+        name=payload.get("name", ""),
+        event_type=payload.get("type", ""),
+        subject=payload.get("subject", ""),
+        body=payload.get("body", ""),
+    )
+    db.add(template)
+    await db.commit()
+    await db.refresh(template)
+    return {
+        "id": template.id,
+        "name": template.name,
+        "type": template.event_type,
+        "subject": template.subject,
+        "body": template.body,
+        "is_active": template.is_active,
+        "created_at": template.created_at.isoformat() if template.created_at else None,
+    }
+
+
 router = APIRouter()
 router.include_router(notifications_router)
 router.include_router(events_router)
+router.include_router(templates_router)

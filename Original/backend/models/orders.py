@@ -1,4 +1,12 @@
-from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, CheckConstraint
+from sqlalchemy import (
+    Column,
+    DateTime,
+    Float,
+    ForeignKey,
+    Integer,
+    String,
+    CheckConstraint,
+)
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -13,15 +21,26 @@ class Order(Base):
     status = Column(String, server_default="PLACED")
     urgency = Column(String, server_default="standard")
     required_delivery_date = Column(DateTime)
-    created_at = Column(DateTime, server_default=func.current_timestamp(), nullable=False)
-    updated_at = Column(DateTime, server_default=func.current_timestamp(), nullable=False)
+    created_at = Column(
+        DateTime, server_default=func.current_timestamp(), nullable=False
+    )
+    updated_at = Column(
+        DateTime, server_default=func.current_timestamp(), nullable=False
+    )
 
+    buyer = relationship("BuyerProfile", foreign_keys=[buyer_id], lazy="noload")
     items = relationship("OrderItem", back_populates="order")
     status_history = relationship("OrderStatusHistory", back_populates="order")
+    history = relationship("OrderStatusHistory", viewonly=True, lazy="noload")
 
     __table_args__ = (
-        CheckConstraint("status IN ('PLACED','MATCHED','CONFIRMED','DISPATCHED','IN_TRANSIT','DELIVERED','CANCELLED')", name="ck_orders_status"),
-        CheckConstraint("urgency IN ('standard','urgent','critical')", name="ck_orders_urgency"),
+        CheckConstraint(
+            "status IN ('PLACED','MATCHED','CONFIRMED','DISPATCHED','IN_TRANSIT','DELIVERED','CANCELLED')",
+            name="ck_orders_status",
+        ),
+        CheckConstraint(
+            "urgency IN ('standard','urgent','critical')", name="ck_orders_urgency"
+        ),
     )
 
 
@@ -37,11 +56,15 @@ class OrderItem(Base):
     status = Column(String, server_default="PENDING")
 
     order = relationship("Order", back_populates="items")
+    category = relationship("PartCategory", foreign_keys=[category_id], lazy="noload")
     assignments = relationship("OrderAssignment", back_populates="order_item")
     status_history = relationship("OrderStatusHistory", back_populates="order_item")
 
     __table_args__ = (
-        CheckConstraint("status IN ('PENDING','MATCHED','CONFIRMED','DISPATCHED','IN_TRANSIT','DELIVERED','CANCELLED')", name="ck_order_items_status"),
+        CheckConstraint(
+            "status IN ('PENDING','MATCHED','CONFIRMED','DISPATCHED','IN_TRANSIT','DELIVERED','CANCELLED')",
+            name="ck_order_items_status",
+        ),
     )
 
 
@@ -55,12 +78,20 @@ class OrderAssignment(Base):
     assigned_price = Column(Float)
     match_score = Column(Float)
     status = Column(String, server_default="PROPOSED")
-    created_at = Column(DateTime, server_default=func.current_timestamp(), nullable=False)
+    created_at = Column(
+        DateTime, server_default=func.current_timestamp(), nullable=False
+    )
 
     order_item = relationship("OrderItem", back_populates="assignments")
+    supplier = relationship(
+        "SupplierProfile", foreign_keys=[supplier_id], lazy="noload"
+    )
 
     __table_args__ = (
-        CheckConstraint("status IN ('PROPOSED','ACCEPTED','REJECTED','FULFILLED')", name="ck_order_assignments_status"),
+        CheckConstraint(
+            "status IN ('PROPOSED','ACCEPTED','REJECTED','FULFILLED')",
+            name="ck_order_assignments_status",
+        ),
     )
 
 
@@ -73,7 +104,9 @@ class OrderStatusHistory(Base):
     from_status = Column(String)
     to_status = Column(String, nullable=False)
     changed_by = Column(Integer, ForeignKey("users.id"))
-    created_at = Column(DateTime, server_default=func.current_timestamp(), nullable=False)
+    created_at = Column(
+        DateTime, server_default=func.current_timestamp(), nullable=False
+    )
 
     order = relationship("Order", back_populates="status_history")
     order_item = relationship("OrderItem", back_populates="status_history")

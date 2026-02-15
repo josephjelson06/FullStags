@@ -66,7 +66,9 @@ async def connect(sid, environ, auth):
     role_room = f"role_{role}"
     await sio.enter_room(sid, user_room)
     await sio.enter_room(sid, role_room)
-    await sio.save_session(sid, {"user_id": user_id_int, "role": role, "rooms": [user_room, role_room]})
+    await sio.save_session(
+        sid, {"user_id": user_id_int, "role": role, "rooms": [user_room, role_room]}
+    )
     return True
 
 
@@ -101,3 +103,4 @@ fastapi_app.include_router(matching_router.router)
 fastapi_app.include_router(deliveries_router.router)
 fastapi_app.include_router(notifications_router.router)
 fastapi_app.include_router(analytics_router.router)
+fastapi_app.include_router(analytics_router.admin_router)

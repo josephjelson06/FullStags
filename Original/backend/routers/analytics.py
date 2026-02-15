@@ -61,3 +61,18 @@ async def read_geo_analytics(db: AsyncSession = Depends(get_db)):
     from backend.services.analytics_service import get_low_stock_items
 
     return {"low_stock": await get_low_stock_items(db)}
+
+
+admin_router = APIRouter(
+    prefix="/api/admin",
+    tags=["admin"],
+    dependencies=[Depends(RoleChecker(["admin"]))],
+)
+
+
+@admin_router.get("/dashboard")
+async def admin_dashboard(db: AsyncSession = Depends(get_db)):
+    """Admin dashboard — returns KPIs + summary metrics."""
+    from backend.services.analytics_service import get_overview
+
+    return await get_overview(db)
