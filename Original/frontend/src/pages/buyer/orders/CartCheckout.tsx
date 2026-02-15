@@ -32,26 +32,26 @@ export function CartCheckout() {
 
   return (
     <div className="space-y-6 max-w-3xl">
-      <h1 className="text-2xl font-bold">Place Order</h1>
+      <h1 className="text-3xl font-bold">Place Order</h1>
 
       {error && <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-900/30 dark:text-red-300">{error}</div>}
 
-      <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900">
+      <div className="surface-card rounded-2xl p-6">
         <h2 className="text-lg font-semibold mb-4">Order Items</h2>
         <div className="space-y-3">
           {items.map((item, i) => (
             <div key={i} className="grid grid-cols-12 gap-3 items-end">
               <div className="col-span-4">
-                <label className="block text-xs text-gray-500 mb-1">Part Number</label>
-                <input value={item.part_number} onChange={e => updateItem(i, 'part_number', e.target.value)} className="w-full rounded border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800" />
+                <label className="block text-xs text-gray-400 mb-1">Part Number</label>
+                <input value={item.part_number} onChange={e => updateItem(i, 'part_number', e.target.value)} className="w-full rounded  px-3 py-2 text-sm" />
               </div>
               <div className="col-span-4">
-                <label className="block text-xs text-gray-500 mb-1">Part Name</label>
-                <input value={item.part_name} onChange={e => updateItem(i, 'part_name', e.target.value)} className="w-full rounded border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800" />
+                <label className="block text-xs text-gray-400 mb-1">Part Name</label>
+                <input value={item.part_name} onChange={e => updateItem(i, 'part_name', e.target.value)} className="w-full rounded  px-3 py-2 text-sm" />
               </div>
               <div className="col-span-2">
-                <label className="block text-xs text-gray-500 mb-1">Qty</label>
-                <input type="number" min="1" value={item.quantity} onChange={e => updateItem(i, 'quantity', parseInt(e.target.value) || 1)} className="w-full rounded border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800" />
+                <label className="block text-xs text-gray-400 mb-1">Qty</label>
+                <input type="number" min="1" value={item.quantity} onChange={e => updateItem(i, 'quantity', parseInt(e.target.value) || 1)} className="w-full rounded  px-3 py-2 text-sm" />
               </div>
               <div className="col-span-2">
                 {items.length > 1 && (
@@ -64,20 +64,20 @@ export function CartCheckout() {
         <button onClick={addItem} className="mt-3 text-sm text-blue-600 hover:underline">+ Add Item</button>
       </div>
 
-      <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900">
+      <div className="surface-card rounded-2xl p-6">
         <h2 className="text-lg font-semibold mb-4">Order Details</h2>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Urgency</label>
-            <select value={urgency} onChange={e => setUrgency(e.target.value)} className="w-full rounded border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800">
+            <label className="block text-xs text-gray-400 mb-1">Urgency</label>
+            <select value={urgency} onChange={e => setUrgency(e.target.value)} className="w-full rounded  px-3 py-2 text-sm">
               <option value="standard">Standard</option>
               <option value="urgent">Urgent</option>
               <option value="critical">Critical</option>
             </select>
           </div>
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Delivery Address</label>
-            <input value={deliveryAddress} onChange={e => setDeliveryAddress(e.target.value)} placeholder="Optional" className="w-full rounded border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800" />
+            <label className="block text-xs text-gray-400 mb-1">Delivery Address</label>
+            <input value={deliveryAddress} onChange={e => setDeliveryAddress(e.target.value)} placeholder="Optional" className="w-full rounded  px-3 py-2 text-sm" />
           </div>
         </div>
       </div>

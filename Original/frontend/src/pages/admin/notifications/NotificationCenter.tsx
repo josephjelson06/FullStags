@@ -40,8 +40,8 @@ export function NotificationCenter() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Notification Center</h1>
-          <p className="text-sm text-gray-500 mt-1">{unreadCount} unread notification{unreadCount !== 1 ? 's' : ''}</p>
+          <h1 className="text-3xl font-bold">Notification Center</h1>
+          <p className="text-sm text-gray-400 mt-1">{unreadCount} unread notification{unreadCount !== 1 ? 's' : ''}</p>
         </div>
         <div className="flex gap-2">
           <button
@@ -52,7 +52,7 @@ export function NotificationCenter() {
             Mark All Read
           </button>
           <button
-            className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
+            className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium hover:bg-gray-200"
             onClick={() => void load()}
           >
             Refresh
@@ -61,9 +61,9 @@ export function NotificationCenter() {
       </div>
 
       {loading ? (
-        <div className="text-center py-8 text-gray-500">Loading notifications...</div>
+        <div className="text-center py-8 text-gray-400">Loading notifications...</div>
       ) : notifications.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">No notifications yet.</div>
+        <div className="text-center py-8 text-gray-400">No notifications yet.</div>
       ) : (
         <div className="space-y-2">
           {notifications.map((n) => (
@@ -71,7 +71,7 @@ export function NotificationCenter() {
               key={n.id}
               className={`rounded-lg border p-4 flex items-start gap-4 ${
                 n.is_read
-                  ? 'border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900'
+                  ? 'surface-card'
                   : 'border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/30'
               }`}
             >
@@ -84,11 +84,11 @@ export function NotificationCenter() {
                   <span className="text-xs text-gray-400">{new Date(n.created_at).toLocaleString()}</span>
                 </div>
                 <div className="font-medium text-sm mt-1">{n.title}</div>
-                <div className="text-sm text-gray-500 mt-0.5">{n.message}</div>
+                <div className="text-sm text-gray-400 mt-0.5">{n.message}</div>
               </div>
               {!n.is_read && (
                 <button
-                  className="flex-shrink-0 rounded bg-gray-100 px-2 py-1 text-xs hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
+                  className="flex-shrink-0 rounded bg-gray-100 px-2 py-1 text-xs hover:bg-gray-200"
                   onClick={() => void markRead(n.id)}
                 >
                   Mark read

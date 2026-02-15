@@ -104,7 +104,7 @@ export function InventoryManager() {
       {error ? <ErrorBanner message={error} onRetry={() => void refetch()} /> : null}
 
       {/* Pick Time SLA */}
-      <article className="rounded-2xl border border-border bg-surface p-5 shadow-sm">
+      <article className="surface-card rounded-2xl p-5 shadow-sm">
         <div className="flex flex-wrap items-end gap-4">
           <div>
             <label className="mb-1.5 block text-sm font-medium text-text-primary" htmlFor="inv-pick-time">
@@ -130,7 +130,7 @@ export function InventoryManager() {
       </article>
 
       {/* Add Item Form */}
-      <form className="grid gap-3 rounded-2xl border border-border bg-surface p-5 shadow-sm md:grid-cols-5" onSubmit={onAdd}>
+      <form className="surface-card grid gap-3 rounded-2xl p-5 shadow-sm md:grid-cols-5" onSubmit={onAdd}>
         <div>
           <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-text-muted" htmlFor="inv-name">Part Name</label>
           <input id="inv-name" className="w-full" value={partName} onChange={(e) => setPartName(e.target.value)} required />

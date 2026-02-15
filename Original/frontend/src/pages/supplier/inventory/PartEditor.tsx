@@ -54,22 +54,22 @@ export function PartEditor() {
     finally { setSubmitting(false); }
   };
 
-  if (loading) return <div className="text-center py-12 text-gray-500">Loading...</div>;
+  if (loading) return <div className="text-center py-12 text-gray-400">Loading...</div>;
 
   return (
     <div className="space-y-6 max-w-2xl">
-      <button onClick={() => navigate('/supplier/inventory')} className="text-sm text-blue-600 hover:underline">← Back to Inventory</button>
-      <h1 className="text-2xl font-bold">{isEdit ? 'Edit Part' : 'Add New Part'}</h1>
+      <button onClick={() => navigate('/supplier/inventory')} className="text-sm text-blue-600 hover:underline">Ã¢â€ Â Back to Inventory</button>
+      <h1 className="text-3xl font-bold">{isEdit ? 'Edit Part' : 'Add New Part'}</h1>
 
       {error && <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-900/30 dark:text-red-300">{error}</div>}
 
-      <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900 space-y-4">
+      <div className="surface-card rounded-2xl p-6 space-y-4">
         {[
           { key: 'part_name', label: 'Part Name', type: 'text' },
           { key: 'part_number', label: 'Part Number', type: 'text' },
           { key: 'brand', label: 'Brand', type: 'text' },
           { key: 'category', label: 'Category', type: 'text' },
-          { key: 'unit_price', label: 'Unit Price (₹)', type: 'number' },
+          { key: 'unit_price', label: 'Unit Price (Ã¢â€šÂ¹)', type: 'number' },
           { key: 'quantity_in_stock', label: 'Quantity in Stock', type: 'number' },
           { key: 'lead_time_hours', label: 'Lead Time (hours)', type: 'number' },
         ].map(f => (
@@ -79,7 +79,7 @@ export function PartEditor() {
               type={f.type}
               value={form[f.key as keyof typeof form]}
               onChange={e => setForm(prev => ({ ...prev, [f.key]: e.target.value }))}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800"
+              className="w-full rounded-lg  px-3 py-2 text-sm"
             />
           </div>
         ))}

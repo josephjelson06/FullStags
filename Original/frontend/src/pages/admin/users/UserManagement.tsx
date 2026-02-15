@@ -57,9 +57,9 @@ export function UserManagement() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">User Management</h1>
+        <h1 className="text-3xl font-bold">User Management</h1>
         <select
-          className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800"
+          className="rounded-lg border surface-card px-3 py-2 text-sm"
           value={roleFilter}
           onChange={(e) => setRoleFilter(e.target.value)}
         >
@@ -71,19 +71,19 @@ export function UserManagement() {
       </div>
 
       {loading ? (
-        <div className="text-center py-8 text-gray-500">Loading users...</div>
+        <div className="text-center py-8 text-gray-400">Loading users...</div>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-800">
+        <div className="overflow-x-auto rounded-lg border ">
+          <table className="min-w-full divide-y">
+            <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Role</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Email</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Role</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+            <tbody className="divide-y divide-gray-200 bg-transparent">
               {users.map((user) => (
                 <tr key={user.id}>
                   <td className="whitespace-nowrap px-6 py-4 text-sm">{user.email}</td>
@@ -103,7 +103,7 @@ export function UserManagement() {
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-sm space-x-2">
                     <button
-                      className="rounded bg-gray-100 px-3 py-1 text-sm hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
+                      className="rounded bg-gray-100 px-3 py-1 text-sm hover:bg-gray-200"
                       onClick={() => viewProfile(user.id)}
                     >
                       View
@@ -127,11 +127,11 @@ export function UserManagement() {
       )}
 
       {selectedProfile && (
-        <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900">
+        <div className="surface-card rounded-2xl p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold">Profile Details</h2>
             <button
-              className="rounded bg-gray-100 px-3 py-1 text-sm hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
+              className="rounded bg-gray-100 px-3 py-1 text-sm hover:bg-gray-200"
               onClick={() => setSelectedProfile(null)}
             >
               Close

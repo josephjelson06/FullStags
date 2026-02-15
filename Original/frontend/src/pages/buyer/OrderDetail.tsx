@@ -106,7 +106,7 @@ export function OrderDetail() {
       {routeError ? <ErrorBanner message={routeError} onRetry={() => void refetchRoute()} /> : null}
 
       {/* Order Info Card */}
-      <article className="rounded-2xl border border-border bg-surface p-5 shadow-sm">
+      <article className="surface-card rounded-2xl p-5 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant={order.status} />
           {order.urgency ? <Badge variant={order.urgency} /> : null}
@@ -200,7 +200,7 @@ export function OrderDetail() {
       ) : routeLoading ? (
         <LoadingSkeleton variant="chart" />
       ) : (
-        <div className="rounded-2xl border border-dashed border-border bg-surface p-6 text-center">
+        <div className="surface-card rounded-2xl border-dashed p-6 text-center">
           <p className="text-sm text-text-secondary">Route data will appear after a supplier is selected.</p>
         </div>
       )}

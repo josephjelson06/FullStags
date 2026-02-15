@@ -29,7 +29,7 @@ export function SupplierReports() {
     load();
   }, []);
 
-  if (loading) return <div className="text-center py-12 text-gray-500">Loading reports...</div>;
+  if (loading) return <div className="text-center py-12 text-gray-400">Loading reports...</div>;
 
   const cards = [
     { label: 'Total Orders', value: data.totalOrders, fmt: String(data.totalOrders) },
@@ -37,17 +37,17 @@ export function SupplierReports() {
     { label: 'Cancelled', value: data.cancelled, fmt: String(data.cancelled), color: 'text-red-600' },
     { label: 'Fulfillment Rate', value: data.fulfillmentRate, fmt: `${data.fulfillmentRate.toFixed(1)}%`, color: 'text-blue-600' },
     { label: 'Avg Lead Time', value: data.avgLeadTime, fmt: `${data.avgLeadTime.toFixed(1)}h` },
-    { label: 'Catalog Value', value: data.revenue, fmt: `₹${data.revenue.toFixed(0)}` },
+    { label: 'Catalog Value', value: data.revenue, fmt: `â‚¹${data.revenue.toFixed(0)}` },
   ];
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Supplier Reports</h1>
+      <h1 className="text-3xl font-bold">Supplier Reports</h1>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {cards.map(c => (
-          <div key={c.label} className="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-900">
-            <div className="text-xs text-gray-500 uppercase">{c.label}</div>
-            <div className={`text-2xl font-bold mt-1 ${c.color ?? ''}`}>{c.fmt}</div>
+          <div key={c.label} className="surface-card rounded-2xl p-5">
+            <div className="text-xs text-gray-400 uppercase">{c.label}</div>
+            <div className={`text-3xl font-bold mt-1 ${c.color ?? ''}`}>{c.fmt}</div>
           </div>
         ))}
       </div>

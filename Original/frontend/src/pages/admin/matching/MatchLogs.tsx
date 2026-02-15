@@ -25,7 +25,7 @@ export function MatchLogs() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Matching Logs</h1>
+      <h1 className="text-3xl font-bold">Matching Logs</h1>
 
       <div className="flex gap-3 items-end">
         <div>
@@ -35,7 +35,7 @@ export function MatchLogs() {
             value={itemId}
             onChange={(e) => setItemId(e.target.value)}
             placeholder="e.g. 1"
-            className="rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800"
+            className="rounded-lg  px-3 py-2 text-sm"
           />
         </div>
         <button
@@ -47,24 +47,24 @@ export function MatchLogs() {
       </div>
 
       {loading ? (
-        <div className="text-center py-8 text-gray-500">Loading...</div>
+        <div className="text-center py-8 text-gray-400">Loading...</div>
       ) : searched && logs.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">No matching logs found for item #{itemId}.</div>
+        <div className="text-center py-8 text-gray-400">No matching logs found for item #{itemId}.</div>
       ) : logs.length > 0 ? (
-        <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-800">
+        <div className="overflow-x-auto rounded-lg border ">
+          <table className="min-w-full divide-y">
+            <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Rank</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Supplier</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Score</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Price</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Distance</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Reliability</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Lead Time</th>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-400">Rank</th>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-400">Supplier</th>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-400">Score</th>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-400">Price</th>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-400">Distance</th>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-400">Reliability</th>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-400">Lead Time</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+            <tbody className="divide-y divide-gray-200 bg-transparent">
               {logs.map((log) => (
                 <tr key={log.id}>
                   <td className="px-4 py-3 text-sm font-medium">#{log.rank}</td>

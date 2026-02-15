@@ -56,9 +56,9 @@ export function AllOrders() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">All Orders</h1>
+        <h1 className="text-3xl font-bold">All Orders</h1>
         <button
-          className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
+          className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium hover:bg-gray-200"
           onClick={() => void loadOrders()}
         >
           Refresh
@@ -66,23 +66,23 @@ export function AllOrders() {
       </div>
 
       {loading ? (
-        <div className="text-center py-8 text-gray-500">Loading orders...</div>
+        <div className="text-center py-8 text-gray-400">Loading orders...</div>
       ) : orders.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">No orders found.</div>
+        <div className="text-center py-8 text-gray-400">No orders found.</div>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-800">
+        <div className="overflow-x-auto rounded-lg border ">
+          <table className="min-w-full divide-y">
+            <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Order</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Urgency</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Items</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Update</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Order</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Urgency</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Items</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Update</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+            <tbody className="divide-y divide-gray-200 bg-transparent">
               {orders.map((order) => (
                 <tr key={order.id}>
                   <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">#{order.id}</td>
@@ -99,7 +99,7 @@ export function AllOrders() {
                   <td className="whitespace-nowrap px-6 py-4 text-sm">{order.items?.length ?? 0}</td>
                   <td className="whitespace-nowrap px-6 py-4 text-sm">
                     <select
-                      className="rounded border border-gray-300 bg-white px-2 py-1 text-sm dark:border-gray-600 dark:bg-gray-800"
+                      className="rounded border surface-card px-2 py-1 text-sm"
                       value={order.status}
                       onChange={(e) => void updateStatus(order.id, e.target.value)}
                     >

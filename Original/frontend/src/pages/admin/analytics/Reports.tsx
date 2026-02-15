@@ -44,15 +44,15 @@ export function AdminReports() {
 
   useEffect(() => { load(); }, []);
 
-  if (loading) return <div className="text-center py-12 text-gray-500">Loading analytics…</div>;
+  if (loading) return <div className="text-center py-12 text-gray-400">Loading analyticsÃ¢â‚¬Â¦</div>;
   if (error) return <div className="text-center py-12 text-red-500">{error}</div>;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Analytics & Reports</h1>
+        <h1 className="text-3xl font-bold">Analytics & Reports</h1>
         <button
-          className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
+          className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium hover:bg-gray-200"
           onClick={() => void load()}
         >
           Refresh
@@ -67,26 +67,26 @@ export function AdminReports() {
           { label: 'Active Buyers', value: kpis?.active_buyers ?? '-' },
           { label: 'Match Rate', value: `${fmt(kpis?.match_rate_percent)}%` },
           { label: 'Avg Fulfillment', value: `${fmt(kpis?.avg_fulfillment_time_hours)}h` },
-          { label: 'Total Revenue', value: `₹${fmt(kpis?.total_revenue, 0)}` },
+          { label: 'Total Revenue', value: `Ã¢â€šÂ¹${fmt(kpis?.total_revenue, 0)}` },
           { label: 'Delivery Completion', value: `${fmt(kpis?.delivery_completion_rate)}%` },
           { label: 'Route Savings', value: `${fmt(kpis?.route_savings_percent)}%` },
         ].map((card) => (
-          <div key={card.label} className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-            <div className="text-xs text-gray-500 uppercase tracking-wide">{card.label}</div>
-            <div className="text-2xl font-bold mt-1">{card.value}</div>
+          <div key={card.label} className="surface-card rounded-2xl p-4">
+            <div className="text-xs text-gray-400 uppercase tracking-wide">{card.label}</div>
+            <div className="text-3xl font-bold mt-1">{card.value}</div>
           </div>
         ))}
       </div>
 
       {/* Demand by Urgency */}
       {demand && demand.by_urgency && (
-        <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900">
+        <div className="surface-card rounded-2xl p-6">
           <h2 className="text-lg font-semibold mb-4">Orders by Urgency</h2>
           <div className="grid grid-cols-3 gap-4">
             {demand.by_urgency.map((item) => (
-              <div key={item.urgency} className="text-center p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
+              <div key={item.urgency} className="text-center p-3 rounded-lg bg-gray-50">
                 <div className="text-lg font-bold">{item.count}</div>
-                <div className="text-sm text-gray-500 capitalize">{item.urgency}</div>
+                <div className="text-sm text-gray-400 capitalize">{item.urgency}</div>
               </div>
             ))}
           </div>
@@ -95,20 +95,20 @@ export function AdminReports() {
 
       {/* Route Analytics */}
       {routes && (
-        <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900">
+        <div className="surface-card rounded-2xl p-6">
           <h2 className="text-lg font-semibold mb-4">Route Optimization</h2>
           <div className="grid grid-cols-3 gap-4">
-            <div className="text-center p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
+            <div className="text-center p-3 rounded-lg bg-gray-50">
               <div className="text-lg font-bold">{fmt(routes.total_distance_km)} km</div>
-              <div className="text-sm text-gray-500">Total Distance</div>
+              <div className="text-sm text-gray-400">Total Distance</div>
             </div>
             <div className="text-center p-3 rounded-lg bg-green-50 dark:bg-green-900/30">
               <div className="text-lg font-bold text-green-700 dark:text-green-400">{fmt(routes.total_savings_km)} km</div>
-              <div className="text-sm text-gray-500">Savings</div>
+              <div className="text-sm text-gray-400">Savings</div>
             </div>
-            <div className="text-center p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
+            <div className="text-center p-3 rounded-lg bg-gray-50">
               <div className="text-lg font-bold">{fmt(routes.avg_stops_per_delivery)}</div>
-              <div className="text-sm text-gray-500">Avg Stops/Delivery</div>
+              <div className="text-sm text-gray-400">Avg Stops/Delivery</div>
             </div>
           </div>
         </div>
@@ -116,19 +116,19 @@ export function AdminReports() {
 
       {/* Top Suppliers */}
       {suppliers && suppliers.top_suppliers && (
-        <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900">
+        <div className="surface-card rounded-2xl p-6">
           <h2 className="text-lg font-semibold mb-4">Top Suppliers</h2>
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <table className="min-w-full divide-y">
               <thead>
                 <tr>
-                  <th className="px-4 py-2 text-left text-xs font-medium uppercase text-gray-500">Name</th>
-                  <th className="px-4 py-2 text-left text-xs font-medium uppercase text-gray-500">Orders Fulfilled</th>
-                  <th className="px-4 py-2 text-left text-xs font-medium uppercase text-gray-500">Reliability</th>
-                  <th className="px-4 py-2 text-left text-xs font-medium uppercase text-gray-500">Avg Lead Time</th>
+                  <th className="px-4 py-2 text-left text-xs font-medium uppercase text-gray-400">Name</th>
+                  <th className="px-4 py-2 text-left text-xs font-medium uppercase text-gray-400">Orders Fulfilled</th>
+                  <th className="px-4 py-2 text-left text-xs font-medium uppercase text-gray-400">Reliability</th>
+                  <th className="px-4 py-2 text-left text-xs font-medium uppercase text-gray-400">Avg Lead Time</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+              <tbody className="divide-y">
                 {suppliers.top_suppliers.map((s) => (
                   <tr key={s.supplier_id}>
                     <td className="px-4 py-2 text-sm font-medium">{s.name}</td>

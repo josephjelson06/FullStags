@@ -65,14 +65,14 @@ export function SignupPage() {
              style={{ background: 'var(--gradient-hero)', color: '#ffffff' }}>
           <div>
             <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.2em]" style={{ opacity: 0.9 }}>
-              <span className="animate-pulse-dot inline-block h-2 w-2 rounded-full bg-white" />
+              <span className="animate-pulse-dot inline-block h-2 w-2 rounded-full bg-transparent" />
               UrgentParts
             </div>
-            <h2 className="mt-8 text-2xl font-bold leading-tight">
+            <h2 className="mt-8 text-3xl font-bold leading-tight">
               Join the network
             </h2>
             <p className="mt-4 text-sm leading-relaxed" style={{ opacity: 0.85 }}>
-              Whether you need emergency parts sourced or you supply them — create your account to join the fastest industrial matching network.
+              Whether you need emergency parts sourced or you supply them Ã¢â‚¬â€ create your account to join the fastest industrial matching network.
             </p>
           </div>
         </div>
@@ -81,7 +81,7 @@ export function SignupPage() {
         <div className="flex w-full flex-col justify-center p-8 md:w-[60%] md:p-10">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] md:hidden"
              style={{ color: 'var(--color-primary)' }}>UrgentParts</p>
-          <h1 className="mt-2 text-2xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
+          <h1 className="mt-2 text-3xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
             Create your account
           </h1>
 

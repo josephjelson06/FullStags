@@ -7,8 +7,8 @@ export function BuyerNotifications() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Notifications</h1>
-          <p className="text-sm text-gray-500 mt-1">{unreadCount} unread</p>
+          <h1 className="text-3xl font-bold">Notifications</h1>
+          <p className="text-sm text-gray-400 mt-1">{unreadCount} unread</p>
         </div>
         <button
           className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
@@ -20,10 +20,10 @@ export function BuyerNotifications() {
       </div>
 
       {loading ? (
-        <div className="text-center py-8 text-gray-500">Loading...</div>
+        <div className="text-center py-8 text-gray-400">Loading...</div>
       ) : notifications.length === 0 ? (
         <div className="text-center py-12 text-gray-400">
-          <div className="text-4xl mb-2">🔔</div>
+          <div className="text-4xl mb-2">Ã°Å¸â€â€</div>
           <p>No notifications yet.</p>
         </div>
       ) : (
@@ -33,7 +33,7 @@ export function BuyerNotifications() {
               key={n.id}
               className={`rounded-lg border p-4 flex items-start gap-3 cursor-pointer transition-colors ${
                 n.is_read
-                  ? 'border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 hover:bg-gray-50'
+                  ? 'surface-card hover:bg-gray-50'
                   : 'border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/30 hover:bg-blue-100'
               }`}
               onClick={() => !n.is_read && markRead(n.id)}
@@ -45,7 +45,7 @@ export function BuyerNotifications() {
                   <span className="text-xs text-gray-400">{new Date(n.created_at).toLocaleString()}</span>
                 </div>
                 <div className="font-medium text-sm">{n.title}</div>
-                <div className="text-sm text-gray-500">{n.message}</div>
+                <div className="text-sm text-gray-400">{n.message}</div>
               </div>
             </div>
           ))}

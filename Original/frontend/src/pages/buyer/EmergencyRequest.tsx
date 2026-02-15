@@ -89,7 +89,7 @@ export function EmergencyRequest() {
 
       {/* Order Form */}
       <form
-        className="grid gap-4 rounded-2xl border border-border bg-surface p-5 shadow-sm md:grid-cols-2"
+        className="surface-card grid gap-4 rounded-2xl p-5 shadow-sm md:grid-cols-2"
         onSubmit={submitRequest}
       >
         <div className="md:col-span-2">
@@ -151,14 +151,14 @@ export function EmergencyRequest() {
       ) : null}
 
       {matchesLoading ? (
-        <div className="flex items-center gap-3 rounded-2xl border border-border bg-surface p-5">
+        <div className="surface-card flex items-center gap-3 rounded-2xl p-5">
           <div className="animate-spin h-5 w-5 rounded-full border-2 border-primary border-t-transparent" />
           <p className="text-sm text-text-secondary">Ranking suppliers by proximity and pick time...</p>
         </div>
       ) : null}
 
       {currentOrderId && !matchesLoading && matches.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border bg-surface p-6 text-center">
+        <div className="surface-card rounded-2xl border-dashed p-6 text-center">
           <p className="text-sm text-text-secondary">No suppliers found with this part nearby.</p>
         </div>
       ) : null}
@@ -171,7 +171,7 @@ export function EmergencyRequest() {
             return (
               <article
                 key={match.matchId}
-                className="group rounded-2xl border bg-surface p-5 shadow-sm transition-all hover:shadow-md"
+                className="surface-card group rounded-2xl p-5 shadow-sm transition-all hover:shadow-md"
                 style={{
                   borderColor: isFastest ? 'var(--color-success)' : 'var(--color-border)',
                   boxShadow: isFastest ? '0 0 0 1px var(--color-success)' : undefined,

@@ -27,27 +27,27 @@ export function BulkUpload() {
 
   return (
     <div className="space-y-6 max-w-2xl">
-      <button onClick={() => navigate('/supplier/inventory')} className="text-sm text-blue-600 hover:underline">← Back to Inventory</button>
-      <h1 className="text-2xl font-bold">Bulk CSV Upload</h1>
+      <button onClick={() => navigate('/supplier/inventory')} className="text-sm text-blue-600 hover:underline">Ã¢â€ Â Back to Inventory</button>
+      <h1 className="text-3xl font-bold">Bulk CSV Upload</h1>
 
-      <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900">
+      <div className="surface-card rounded-2xl p-6">
         <h2 className="font-semibold mb-2">CSV Format</h2>
-        <p className="text-sm text-gray-500 mb-3">Upload a CSV file with the following columns:</p>
-        <code className="block rounded bg-gray-100 p-3 text-xs dark:bg-gray-800">
+        <p className="text-sm text-gray-400 mb-3">Upload a CSV file with the following columns:</p>
+        <code className="block rounded bg-gray-100 p-3 text-xs">
           part_name, part_number, brand, category, unit_price, quantity_in_stock, lead_time_hours
         </code>
       </div>
 
-      <div className="rounded-lg border-2 border-dashed border-gray-300 bg-white p-8 text-center dark:border-gray-600 dark:bg-gray-900">
+      <div className="rounded-lg border-2 border-dashed surface-card p-8 text-center">
         <input type="file" accept=".csv" onChange={e => { setFile(e.target.files?.[0] ?? null); setResult(null); setError(null); }} className="block mx-auto text-sm" />
-        {file && <p className="mt-2 text-sm text-gray-500">{file.name} ({(file.size / 1024).toFixed(1)} KB)</p>}
+        {file && <p className="mt-2 text-sm text-gray-400">{file.name} ({(file.size / 1024).toFixed(1)} KB)</p>}
       </div>
 
       {error && <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-900/30 dark:text-red-300">{error}</div>}
 
       {result && (
         <div className="rounded-lg bg-green-50 p-4 dark:bg-green-900/30">
-          <div className="text-sm font-medium text-green-800 dark:text-green-300">✅ {result.imported} parts imported</div>
+          <div className="text-sm font-medium text-green-800 dark:text-green-300">Ã¢Å“â€¦ {result.imported} parts imported</div>
           {result.errors && result.errors.length > 0 && (
             <ul className="mt-2 text-sm text-red-600 list-disc list-inside">
               {result.errors.map((e, i) => <li key={i}>{e}</li>)}

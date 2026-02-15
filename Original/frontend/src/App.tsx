@@ -8,6 +8,7 @@ import { getRoleHomePath } from '@/utils/routes';
 // ── Auth ──────────────────────────────────────────────────────────────
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { SignupPage } from '@/pages/auth/SignupPage';
+import { LandingPage } from '@/pages/LandingPage';
 
 // ── Buyer Pages ───────────────────────────────────────────────────────
 import { BuyerProfile } from '@/pages/buyer/profile/BuyerProfile';
@@ -72,21 +73,13 @@ function ProtectedRoute({ allowedRoles }: { allowedRoles?: UserRole[] }) {
   return <Outlet />;
 }
 
-function RootRedirect() {
-  const { user, isAuthenticated } = useAuth();
 
-  if (!isAuthenticated || !user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return <Navigate to={getRoleHomePath(user.role)} replace />;
-}
 
 export function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<RootRedirect />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
 

@@ -73,11 +73,11 @@ export function MatchConfig() {
     }
   };
 
-  if (loading) return <div className="text-center py-12 text-gray-500">Loading configuration...</div>;
+  if (loading) return <div className="text-center py-12 text-gray-400">Loading configuration...</div>;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Matching Configuration</h1>
+      <h1 className="text-3xl font-bold">Matching Configuration</h1>
       {message && (
         <div className={`rounded-lg p-3 text-sm ${message.includes('Failed') ? 'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-300' : 'bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300'}`}>
           {message}
@@ -85,17 +85,17 @@ export function MatchConfig() {
       )}
 
       {config && (
-        <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900">
+        <div className="surface-card rounded-2xl p-6">
           <h2 className="text-lg font-semibold mb-4">Weight Profiles</h2>
-          <p className="text-sm text-gray-500 mb-4">Each urgency tier's weights must sum to 1.0</p>
+          <p className="text-sm text-gray-400 mb-4">Each urgency tier's weights must sum to 1.0</p>
           <div className="space-y-4">
             {Object.entries(config.weight_profiles).map(([urgency, weights]) => (
-              <div key={urgency} className="rounded-lg border border-gray-100 p-4 dark:border-gray-800">
+              <div key={urgency} className="rounded-lg  p-4">
                 <div className="font-medium capitalize mb-3">{urgency}</div>
                 <div className="grid grid-cols-4 gap-3">
                   {Object.entries(weights).map(([field, val]) => (
                     <div key={field}>
-                      <label className="block text-xs text-gray-500 mb-1 capitalize">{field.replace('_', ' ')}</label>
+                      <label className="block text-xs text-gray-400 mb-1 capitalize">{field.replace('_', ' ')}</label>
                       <input
                         type="number"
                         step="0.05"
@@ -103,7 +103,7 @@ export function MatchConfig() {
                         max="1"
                         value={val}
                         onChange={(e) => handleWeightChange(urgency, field, e.target.value)}
-                        className="w-full rounded border border-gray-300 px-2 py-1 text-sm dark:border-gray-600 dark:bg-gray-800"
+                        className="w-full rounded  px-2 py-1 text-sm"
                       />
                     </div>
                   ))}
@@ -124,17 +124,17 @@ export function MatchConfig() {
         </div>
       )}
 
-      <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900">
+      <div className="surface-card rounded-2xl p-6">
         <h2 className="text-lg font-semibold mb-4">Run Matching</h2>
         {placedOrders.length === 0 ? (
-          <p className="text-sm text-gray-500">No orders in PLACED status.</p>
+          <p className="text-sm text-gray-400">No orders in PLACED status.</p>
         ) : (
           <div className="space-y-2">
             {placedOrders.map((order) => (
-              <div key={order.id} className="flex items-center justify-between rounded-lg border border-gray-100 p-3 dark:border-gray-800">
+              <div key={order.id} className="flex items-center justify-between rounded-lg  p-3">
                 <div>
                   <span className="font-medium">Order #{order.id}</span>
-                  <span className="ml-2 text-sm text-gray-500 capitalize">{order.urgency}</span>
+                  <span className="ml-2 text-sm text-gray-400 capitalize">{order.urgency}</span>
                 </div>
                 <button
                   className="rounded bg-orange-100 px-3 py-1 text-sm text-orange-700 hover:bg-orange-200 dark:bg-orange-900 dark:text-orange-300 disabled:opacity-50"

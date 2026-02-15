@@ -19,28 +19,28 @@ export function AllSuppliers() {
     load();
   }, []);
 
-  if (loading) return <div className="text-center py-12 text-gray-500">Loading suppliers...</div>;
+  if (loading) return <div className="text-center py-12 text-gray-400">Loading suppliers...</div>;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">All Suppliers</h1>
+      <h1 className="text-3xl font-bold">All Suppliers</h1>
 
-      <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-800">
+      <div className="overflow-x-auto rounded-lg border ">
+        <table className="min-w-full divide-y">
+          <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Business</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Address</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Service Radius</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Reliability</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Business</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Address</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Service Radius</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Reliability</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+          <tbody className="divide-y divide-gray-200 bg-transparent">
             {suppliers.map((s) => (
               <tr key={s.id}>
                 <td className="px-6 py-4 text-sm font-medium">{s.business_name}</td>
-                <td className="px-6 py-4 text-sm text-gray-500">{s.warehouse_address}</td>
+                <td className="px-6 py-4 text-sm text-gray-400">{s.warehouse_address}</td>
                 <td className="px-6 py-4 text-sm">{s.service_radius_km} km</td>
                 <td className="px-6 py-4 text-sm">
                   <span className={`font-medium ${
@@ -61,7 +61,7 @@ export function AllSuppliers() {
               </tr>
             ))}
             {suppliers.length === 0 && (
-              <tr><td colSpan={5} className="px-6 py-8 text-center text-gray-500">No suppliers registered.</td></tr>
+              <tr><td colSpan={5} className="px-6 py-8 text-center text-gray-400">No suppliers registered.</td></tr>
             )}
           </tbody>
         </table>

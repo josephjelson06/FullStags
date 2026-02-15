@@ -19,33 +19,33 @@ export function PartDetail() {
     load();
   }, [partId]);
 
-  if (loading) return <div className="text-center py-12 text-gray-500">Loading part...</div>;
+  if (loading) return <div className="text-center py-12 text-gray-400">Loading part...</div>;
   if (!part) return <div className="text-center py-12 text-red-500">Part not found.</div>;
 
   return (
     <div className="space-y-6 max-w-2xl">
-      <button onClick={() => navigate(-1)} className="text-sm text-blue-600 hover:underline">← Back</button>
+      <button onClick={() => navigate(-1)} className="text-sm text-blue-600 hover:underline">â† Back</button>
       <div>
-        <h1 className="text-2xl font-bold">{part.part_name}</h1>
-        <p className="text-sm text-gray-500 mt-1">Part #{part.part_number}</p>
+        <h1 className="text-3xl font-bold">{part.part_name}</h1>
+        <p className="text-sm text-gray-400 mt-1">Part #{part.part_number}</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-900">
-          <div className="text-xs text-gray-500 uppercase">Price</div>
-          <div className="text-2xl font-bold mt-1">₹{part.unit_price.toFixed(2)}</div>
+        <div className="surface-card rounded-2xl p-5">
+          <div className="text-xs text-gray-400 uppercase">Price</div>
+          <div className="text-3xl font-bold mt-1">â‚¹{part.unit_price.toFixed(2)}</div>
         </div>
-        <div className="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-900">
-          <div className="text-xs text-gray-500 uppercase">In Stock</div>
-          <div className={`text-2xl font-bold mt-1 ${part.quantity_in_stock <= 5 ? 'text-red-600' : 'text-green-600'}`}>{part.quantity_in_stock}</div>
+        <div className="surface-card rounded-2xl p-5">
+          <div className="text-xs text-gray-400 uppercase">In Stock</div>
+          <div className={`text-3xl font-bold mt-1 ${part.quantity_in_stock <= 5 ? 'text-red-600' : 'text-green-600'}`}>{part.quantity_in_stock}</div>
         </div>
-        <div className="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-900">
-          <div className="text-xs text-gray-500 uppercase">Lead Time</div>
-          <div className="text-2xl font-bold mt-1">{part.lead_time_hours}h</div>
+        <div className="surface-card rounded-2xl p-5">
+          <div className="text-xs text-gray-400 uppercase">Lead Time</div>
+          <div className="text-3xl font-bold mt-1">{part.lead_time_hours}h</div>
         </div>
-        <div className="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-900">
-          <div className="text-xs text-gray-500 uppercase">Brand</div>
-          <div className="text-2xl font-bold mt-1">{part.brand || '—'}</div>
+        <div className="surface-card rounded-2xl p-5">
+          <div className="text-xs text-gray-400 uppercase">Brand</div>
+          <div className="text-3xl font-bold mt-1">{part.brand || 'â€”'}</div>
         </div>
       </div>
 

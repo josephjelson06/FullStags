@@ -30,50 +30,50 @@ export function RouteMonitor() {
     await load();
   };
 
-  if (loading) return <div className="text-center py-12 text-gray-500">Loading deliveries...</div>;
+  if (loading) return <div className="text-center py-12 text-gray-400">Loading deliveries...</div>;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Route Monitor</h1>
-        <button className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600" onClick={() => void load()}>
+        <h1 className="text-3xl font-bold">Route Monitor</h1>
+        <button className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium hover:bg-gray-200" onClick={() => void load()}>
           Refresh
         </button>
       </div>
 
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-            <div className="text-xs text-gray-500 uppercase">Total</div>
-            <div className="text-2xl font-bold">{stats.total_deliveries}</div>
+          <div className="surface-card rounded-2xl p-4">
+            <div className="text-xs text-gray-400 uppercase">Total</div>
+            <div className="text-3xl font-bold">{stats.total_deliveries}</div>
           </div>
-          <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-            <div className="text-xs text-gray-500 uppercase">In Progress</div>
-            <div className="text-2xl font-bold text-yellow-600">{stats.in_progress_deliveries}</div>
+          <div className="surface-card rounded-2xl p-4">
+            <div className="text-xs text-gray-400 uppercase">In Progress</div>
+            <div className="text-3xl font-bold text-yellow-600">{stats.in_progress_deliveries}</div>
           </div>
-          <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-            <div className="text-xs text-gray-500 uppercase">Completed</div>
-            <div className="text-2xl font-bold text-green-600">{stats.completed_deliveries}</div>
+          <div className="surface-card rounded-2xl p-4">
+            <div className="text-xs text-gray-400 uppercase">Completed</div>
+            <div className="text-3xl font-bold text-green-600">{stats.completed_deliveries}</div>
           </div>
-          <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-            <div className="text-xs text-gray-500 uppercase">Route Savings</div>
-            <div className="text-2xl font-bold text-blue-600">{stats.total_savings_percent.toFixed(1)}%</div>
+          <div className="surface-card rounded-2xl p-4">
+            <div className="text-xs text-gray-400 uppercase">Route Savings</div>
+            <div className="text-3xl font-bold text-blue-600">{stats.total_savings_percent.toFixed(1)}%</div>
           </div>
         </div>
       )}
 
-      <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-800">
+      <div className="overflow-x-auto rounded-lg border ">
+        <table className="min-w-full divide-y">
+          <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">ID</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Stops</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Distance</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">ID</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Status</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Stops</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Distance</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+          <tbody className="divide-y divide-gray-200 bg-transparent">
             {deliveries.map((d) => (
               <tr key={d.id}>
                 <td className="px-6 py-4 text-sm font-medium">#{d.id}</td>
@@ -103,7 +103,7 @@ export function RouteMonitor() {
               </tr>
             ))}
             {deliveries.length === 0 && (
-              <tr><td colSpan={5} className="px-6 py-8 text-center text-gray-500">No deliveries found.</td></tr>
+              <tr><td colSpan={5} className="px-6 py-8 text-center text-gray-400">No deliveries found.</td></tr>
             )}
           </tbody>
         </table>

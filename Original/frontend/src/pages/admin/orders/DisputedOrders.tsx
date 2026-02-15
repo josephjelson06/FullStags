@@ -22,29 +22,29 @@ export function DisputedOrders() {
     setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o));
   };
 
-  if (loading) return <div className="text-center py-12 text-gray-500">Loading...</div>;
+  if (loading) return <div className="text-center py-12 text-gray-400">Loading...</div>;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Disputed & Cancelled Orders</h1>
+      <h1 className="text-3xl font-bold">Disputed & Cancelled Orders</h1>
       {orders.length === 0 ? (
         <div className="text-center py-12 text-gray-400">
-          <div className="text-4xl mb-2">✅</div>
+          <div className="text-4xl mb-2">ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦</div>
           <p>No disputed or cancelled orders.</p>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-800">
+        <div className="overflow-x-auto rounded-lg border ">
+          <table className="min-w-full divide-y">
+            <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Order</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Urgency</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Order</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Urgency</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Date</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+            <tbody className="divide-y divide-gray-200 bg-transparent">
               {orders.map(o => (
                 <tr key={o.id}>
                   <td className="px-6 py-4 text-sm font-medium">#{o.id}</td>
@@ -52,7 +52,7 @@ export function DisputedOrders() {
                     <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${o.status === 'DISPUTED' ? 'bg-orange-100 text-orange-800' : 'bg-red-100 text-red-800'}`}>{o.status}</span>
                   </td>
                   <td className="px-6 py-4 text-sm capitalize">{o.urgency}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500">{new Date(o.created_at).toLocaleDateString()}</td>
+                  <td className="px-6 py-4 text-sm text-gray-400">{new Date(o.created_at).toLocaleDateString()}</td>
                   <td className="px-6 py-4 text-sm space-x-2">
                     {o.status === 'DISPUTED' && (
                       <>
