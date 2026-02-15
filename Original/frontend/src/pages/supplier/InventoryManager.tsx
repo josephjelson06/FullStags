@@ -1,20 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { DataTable, type DataColumn } from '@/components/DataTable';
 import { ErrorBanner } from '@/components/ErrorBanner';
 import { Modal } from '@/components/Modal';
 import { PageHeader } from '@/components/PageHeader';
 import { useInventory } from '@/hooks/useInventory';
+import { listPartCategories } from '@/services/api';
 import type { InventoryItem } from '@/types';
 
 export function InventoryManager() {
-  const { items, pickTimeMinutes, loading, error, refetch, addItem, editItem, removeItem, savePickTime } = useInventory();
+  const { items, loading, error, refetch, addItem, editItem, removeItem } = useInventory();
 
+  const [categories, setCategories] = useState<Array<{ id: number; name: string }>>([]);
+  const [categoryId, setCategoryId] = useState<string>('');
   const [partName, setPartName] = useState('');
   const [partNumber, setPartNumber] = useState('');
   const [quantity, setQuantity] = useState('1');
+  const [leadTimeHours, setLeadTimeHours] = useState('24');
   const [price, setPrice] = useState('100');
-  const [pickTimeDraft, setPickTimeDraft] = useState(String(pickTimeMinutes));
   const [submitting, setSubmitting] = useState(false);
 
   // Edit modal state
@@ -24,17 +27,24 @@ export function InventoryManager() {
 
   const onAdd = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!categoryId) {
+      return;
+    }
     setSubmitting(true);
     try {
       await addItem({
+        categoryId: Number(categoryId),
         partName,
         partNumber,
         quantity: Number(quantity),
+        leadTimeHours: Number(leadTimeHours),
         price: Number(price),
       });
+      setCategoryId('');
       setPartName('');
       setPartNumber('');
       setQuantity('1');
+      setLeadTimeHours('24');
       setPrice('100');
     } finally {
       setSubmitting(false);
@@ -55,6 +65,17 @@ export function InventoryManager() {
     });
     setEditingItem(null);
   };
+
+  useEffect(() => {
+    void (async () => {
+      try {
+        const data = await listPartCategories();
+        setCategories(data.map((row) => ({ id: row.id, name: row.name })));
+      } catch {
+        setCategories([]);
+      }
+    })();
+  }, []);
 
   const columns: DataColumn<InventoryItem>[] = [
     { header: 'Part Name', render: (row) => <span className="font-medium">{row.partName}</span> },
@@ -98,39 +119,22 @@ export function InventoryManager() {
     <section className="space-y-6">
       <PageHeader
         title="Inventory Manager"
-        subtitle="Manage available parts and keep your pick-time SLA sharp for higher ranking."
+        subtitle="Manage available catalog parts synced from backend inventory endpoints."
       />
 
       {error ? <ErrorBanner message={error} onRetry={() => void refetch()} /> : null}
 
-      {/* Pick Time SLA */}
-      <article className="surface-card rounded-2xl p-5 shadow-sm">
-        <div className="flex flex-wrap items-end gap-4">
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-text-primary" htmlFor="inv-pick-time">
-              Pick Time SLA (minutes)
-            </label>
-            <input
-              id="inv-pick-time"
-              className="w-32"
-              value={pickTimeDraft}
-              onChange={(e) => setPickTimeDraft(e.target.value)}
-            />
-          </div>
-          <button
-            type="button"
-            onClick={() => void savePickTime(Number(pickTimeDraft))}
-            className="rounded-xl px-4 py-2 text-sm font-semibold shadow-sm transition-all hover:shadow-md"
-            style={{ background: 'var(--gradient-primary)', color: 'var(--color-text-on-primary)' }}
-          >
-            Save Pick Time
-          </button>
-        </div>
-        <p className="mt-2 text-xs text-text-muted">Faster pick times = higher ranking in emergency searches.</p>
-      </article>
-
       {/* Add Item Form */}
-      <form className="surface-card grid gap-3 rounded-2xl p-5 shadow-sm md:grid-cols-5" onSubmit={onAdd}>
+      <form className="surface-card grid gap-3 rounded-2xl p-5 shadow-sm md:grid-cols-6" onSubmit={onAdd}>
+        <div>
+          <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-text-muted" htmlFor="inv-category">Category</label>
+          <select id="inv-category" className="w-full" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
+            <option value="">Select category</option>
+            {categories.map((row) => (
+              <option key={row.id} value={row.id}>{row.name}</option>
+            ))}
+          </select>
+        </div>
         <div>
           <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-text-muted" htmlFor="inv-name">Part Name</label>
           <input id="inv-name" className="w-full" value={partName} onChange={(e) => setPartName(e.target.value)} required />
@@ -142,6 +146,10 @@ export function InventoryManager() {
         <div>
           <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-text-muted" htmlFor="inv-qty">Quantity</label>
           <input id="inv-qty" type="number" className="w-full" value={quantity} onChange={(e) => setQuantity(e.target.value)} required />
+        </div>
+        <div>
+          <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-text-muted" htmlFor="inv-lead">Lead Time (h)</label>
+          <input id="inv-lead" type="number" className="w-full" value={leadTimeHours} onChange={(e) => setLeadTimeHours(e.target.value)} required />
         </div>
         <div>
           <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-text-muted" htmlFor="inv-price">Price</label>

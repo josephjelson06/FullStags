@@ -10,6 +10,7 @@ interface UserLike {
 interface ApiErrorEnvelope {
   error?: string;
   message?: string;
+  detail?: string;
   code?: string;
   traceId?: string;
 }
@@ -40,8 +41,9 @@ function readTokenFromStorage(): string | null {
 export async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const token = readTokenFromStorage();
   const headers = new Headers(options?.headers ?? undefined);
+  const isFormData = options?.body instanceof FormData;
 
-  if (!headers.has('Content-Type')) {
+  if (!isFormData && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
   }
 
@@ -49,7 +51,10 @@ export async function request<T>(path: string, options?: RequestInit): Promise<T
     headers.set('Authorization', `Bearer ${token}`);
   }
 
-  const response = await fetch(`${env.apiUrl}${path}`, {
+  const baseUrl = env.apiUrl.trim();
+  const requestUrl = `${baseUrl}${path}`;
+
+  const response = await fetch(requestUrl, {
     ...options,
     headers,
   });
@@ -59,7 +64,7 @@ export async function request<T>(path: string, options?: RequestInit): Promise<T
 
     try {
       const errorBody = (await response.json()) as ApiErrorEnvelope;
-      message = errorBody.message ?? errorBody.error ?? message;
+      message = errorBody.message ?? errorBody.detail ?? errorBody.error ?? message;
       if (errorBody.traceId) {
         message = `${message} (trace: ${errorBody.traceId})`;
       }

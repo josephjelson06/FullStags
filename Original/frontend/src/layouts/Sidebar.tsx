@@ -49,18 +49,6 @@ const BUYER_NAV: NavGroup[] = [
     ],
   },
   {
-    section: 'Routes',
-    items: [
-      { label: 'Live Tracking', path: '/buyer/tracking/active', icon: MapPin },
-    ],
-  },
-  {
-    section: 'Browse',
-    items: [
-      { label: 'Supplier Profile', path: '/buyer/suppliers/browse', icon: Store },
-    ],
-  },
-  {
     section: 'Orders',
     items: [
       { label: 'My Orders', path: '/buyer/orders', icon: ListChecks },
@@ -88,12 +76,6 @@ const BUYER_NAV: NavGroup[] = [
 ];
 
 const SUPPLIER_NAV: NavGroup[] = [
-  {
-    section: 'Matching',
-    items: [
-      { label: 'My Matches', path: '/supplier/matches', icon: Cpu },
-    ],
-  },
   {
     section: 'Routes',
     items: [
@@ -177,7 +159,7 @@ const ADMIN_NAV: NavGroup[] = [
     section: 'Orders',
     items: [
       { label: 'All Orders', path: '/admin/orders', icon: ClipboardList },
-      { label: 'Disputed Orders', path: '/admin/orders/disputed', icon: ClipboardList },
+      { label: 'Cancelled Orders', path: '/admin/orders/disputed', icon: ClipboardList },
     ],
   },
   {

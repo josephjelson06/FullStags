@@ -55,7 +55,7 @@ export function ActiveOrders() {
     {
       header: 'Actions',
       render: (row) =>
-        row.status === 'courier_to_factory' ? (
+        row.status === 'IN_TRANSIT' ? (
           <button
             type="button"
             onClick={() => void runAction(row.orderId, 'delivered')}

@@ -19,7 +19,9 @@ export function useSocket(options: UseSocketOptions = {}) {
     const token = localStorage.getItem(AUTH_TOKEN_KEY);
     if (!token) return;
 
-    const socket = io(env.apiUrl, {
+    const socketBaseUrl = env.socketUrl || env.apiUrl || window.location.origin;
+
+    const socket = io(socketBaseUrl, {
       path: '/ws/socket.io',
       auth: { token },
       transports: ['websocket', 'polling'],

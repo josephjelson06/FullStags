@@ -1,36 +1,57 @@
 export type UserRole = 'buyer' | 'supplier' | 'admin';
-export type Urgency = 'critical' | 'high' | 'standard';
-export type OrderStatus =
+export type Urgency = 'critical' | 'high' | 'urgent' | 'standard';
+
+export type BackendOrderStatus =
+  | 'PLACED'
+  | 'MATCHED'
+  | 'CONFIRMED'
+  | 'DISPATCHED'
+  | 'IN_TRANSIT'
+  | 'DELIVERED'
+  | 'CANCELLED';
+
+// Keep legacy statuses for backward compatibility with older pages/components.
+export type LegacyOrderStatus =
   | 'matching'
   | 'pending_acceptance'
   | 'picking'
   | 'courier_to_supplier'
   | 'courier_to_factory'
   | 'delivered';
+
+export type OrderStatus = BackendOrderStatus | LegacyOrderStatus;
+
 export type OrderAction =
   | 'select_supplier'
   | 'accept'
   | 'decline'
   | 'ready'
   | 'courier_picked_up'
-  | 'delivered';
-export type LegStatus = 'pending' | 'in_progress' | 'completed';
+  | 'delivered'
+  | 'cancel';
 
+export type LegStatus = 'pending' | 'in_progress' | 'completed';
 
 export interface GeoLocation {
   lat: number;
   lng: number;
-  address: string;
+  address?: string;
 }
 
-export interface User {
-  id: string;
+export interface SessionUser {
+  userId: number;
   email: string;
-  name: string;
   role: UserRole;
+  displayName: string;
   companyName: string;
-  location: GeoLocation;
   token: string;
+  location: GeoLocation;
+}
+
+// Legacy alias used across existing pages/hooks.
+export interface User extends SessionUser {
+  id: string;
+  name: string;
 }
 
 export type AuthResponse = User;
@@ -38,9 +59,12 @@ export type AuthResponse = User;
 export interface RegisterInput {
   email: string;
   password: string;
-  name: string;
-  role: UserRole;
+  role: Extract<UserRole, 'buyer' | 'supplier'>;
+  displayName: string;
   companyName: string;
+  industryType?: string;
+  gstNumber?: string;
+  serviceRadiusKm?: number;
   location: GeoLocation;
 }
 
@@ -49,11 +73,16 @@ export interface LoginInput {
   password: string;
 }
 
-export interface CreateOrderInput {
-  partName: string;
+export interface CreateOrderItemInput {
+  categoryId: number;
   partNumber: string;
-  urgency: Urgency;
-  deliveryLocation: GeoLocation;
+  partDescription?: string;
+  quantity: number;
+}
+
+export interface CreateOrderInput {
+  items: CreateOrderItemInput[];
+  urgency: Extract<Urgency, 'critical' | 'urgent' | 'standard'>;
 }
 
 export interface SupplierMatch {
@@ -79,37 +108,71 @@ export interface SelectedSupplier {
   totalTimeMinutes: number;
 }
 
+export interface OrderItemAssignment {
+  id: number;
+  orderItemId: number;
+  supplierId: number;
+  supplierName?: string | null;
+  supplierUserId?: number | null;
+  catalogId: number;
+  assignedPrice?: number | null;
+  matchScore?: number | null;
+  status: 'PROPOSED' | 'ACCEPTED' | 'REJECTED' | 'FULFILLED' | string;
+  distanceKm?: number | null;
+}
+
+export interface OrderItemSummary {
+  id: number;
+  orderId: number;
+  categoryId: number;
+  categoryName?: string | null;
+  partNumber: string;
+  partDescription?: string | null;
+  quantity: number;
+  status: string;
+  assignments: OrderItemAssignment[];
+}
+
 export interface Order {
+  id: number;
   orderId: string;
   status: OrderStatus;
+  urgency?: Urgency | string;
   partName: string;
   partNumber: string;
-  urgency?: Urgency;
-  buyer?: { id: string; name: string; companyName: string };
-  supplier?: { id: string; name: string; location: GeoLocation };
-  selectedSupplier?: SelectedSupplier;
-  supplierName?: string;
-  deliveryLocation?: GeoLocation;
-  partPrice?: number;
-  pickTimeMinutes?: number;
-  driveTimeMinutes?: number;
-  totalTimeMinutes?: number;
-  etaMinutesRemaining?: number;
   buyerCompany?: string;
+  supplierName?: string;
   distanceKm?: number;
-  acceptDeadlineMinutes?: number;
+  partPrice?: number;
+  etaMinutesRemaining?: number;
   message?: string;
   createdAt: string;
+  created_at?: string;
   updatedAt?: string;
-  deliveredAt?: string;
-  totalFulfillmentMinutes?: number;
-  estimatedDowntimeSaved?: number;
+  updated_at?: string;
+  totalItems?: number;
+  totalValue?: number;
+  buyerUserId?: number;
+  buyer?: {
+    id: string;
+    name: string;
+    companyName: string;
+  };
+  supplier?: {
+    id: string;
+    name: string;
+    location: GeoLocation;
+  };
+  items: OrderItemSummary[];
+  selectedSupplier?: SelectedSupplier;
 }
 
 export interface OrdersResponse {
-  orders: Order[];
+  orders?: Order[];
+  items?: Order[];
   page?: number;
   pageSize?: number;
+  page_size?: number;
   total?: number;
 }
 
@@ -124,9 +187,6 @@ export interface UpdateOrderResponse {
   selectedSupplier?: SelectedSupplier;
   message?: string;
   updatedAt?: string;
-  deliveredAt?: string;
-  totalFulfillmentMinutes?: number;
-  estimatedDowntimeSaved?: number;
 }
 
 export interface RouteLeg {
@@ -142,15 +202,22 @@ export interface RouteData {
   courierCurrentLocation: { lat: number; lng: number };
   etaMinutesRemaining: number;
   legs: RouteLeg[];
+  deliveryId?: number;
 }
 
 export type RouteResponse = RouteData;
 
 export interface InventoryItem {
   itemId: string;
+  id?: number;
+  categoryId?: number;
+  categoryName?: string | null;
   partName: string;
   partNumber: string;
+  brand?: string | null;
   quantity: number;
+  minOrderQuantity?: number;
+  leadTimeHours?: number;
   price: number;
 }
 
@@ -161,16 +228,24 @@ export interface InventoryResponse {
 }
 
 export interface CreateInventoryItemInput {
+  categoryId: number;
   partName: string;
   partNumber: string;
+  brand?: string;
   quantity: number;
+  minOrderQuantity?: number;
+  leadTimeHours: number;
   price: number;
 }
 
 export interface UpdateInventoryItemInput {
+  categoryId?: number;
   partName?: string;
   partNumber?: string;
+  brand?: string;
   quantity?: number;
+  minOrderQuantity?: number;
+  leadTimeHours?: number;
   price?: number;
 }
 
@@ -193,6 +268,7 @@ export interface DashboardMetrics {
 export interface ApiError {
   error: string;
   message?: string;
+  detail?: string;
   code?: string;
   traceId?: string;
   details?: unknown;

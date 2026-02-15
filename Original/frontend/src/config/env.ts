@@ -1,5 +1,6 @@
 interface FrontendEnv {
   apiUrl: string;
+  socketUrl: string;
   useMock: boolean;
 }
 
@@ -21,5 +22,6 @@ function parseBoolean(value: string | undefined, defaultValue: boolean): boolean
 
 export const env: FrontendEnv = {
   apiUrl: import.meta.env.VITE_API_URL || '',
+  socketUrl: import.meta.env.VITE_SOCKET_URL || '',
   useMock: parseBoolean(import.meta.env.VITE_USE_MOCK, false),
 };

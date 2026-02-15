@@ -15,22 +15,27 @@ export function RouteMonitor() {
   const load = async () => {
     setLoading(true);
     try {
-      const [d, s] = await Promise.all([getDeliveries(), getDeliveryStats()]);
-      setDeliveries(d);
-      setStats(s);
+      const [deliveryRows, statsRow] = await Promise.all([getDeliveries(), getDeliveryStats()]);
+      setDeliveries(deliveryRows);
+      setStats(statsRow);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    void load();
+  }, []);
 
-  const advance = async (id: number, status: string) => {
+  const advance = async (id: number, status: 'IN_PROGRESS' | 'COMPLETED') => {
     await updateDeliveryStatus(id, status);
     await load();
   };
 
-  if (loading) return <div className="text-center py-12 text-gray-400">Loading deliveries...</div>;
+  if (loading) return <div className="py-12 text-center text-gray-400">Loading deliveries...</div>;
+
+  const inProgressCount = deliveries.filter((delivery) => delivery.status === 'IN_PROGRESS').length;
+  const completedCount = deliveries.filter((delivery) => delivery.status === 'COMPLETED').length;
 
   return (
     <div className="space-y-6">
@@ -41,28 +46,26 @@ export function RouteMonitor() {
         </button>
       </div>
 
-      {stats && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="surface-card rounded-2xl p-4">
-            <div className="text-xs text-gray-400 uppercase">Total</div>
-            <div className="text-3xl font-bold">{stats.total_deliveries}</div>
-          </div>
-          <div className="surface-card rounded-2xl p-4">
-            <div className="text-xs text-gray-400 uppercase">In Progress</div>
-            <div className="text-3xl font-bold text-yellow-600">{stats.in_progress_deliveries}</div>
-          </div>
-          <div className="surface-card rounded-2xl p-4">
-            <div className="text-xs text-gray-400 uppercase">Completed</div>
-            <div className="text-3xl font-bold text-green-600">{stats.completed_deliveries}</div>
-          </div>
-          <div className="surface-card rounded-2xl p-4">
-            <div className="text-xs text-gray-400 uppercase">Route Savings</div>
-            <div className="text-3xl font-bold text-blue-600">{stats.total_savings_percent.toFixed(1)}%</div>
-          </div>
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div className="surface-card rounded-2xl p-4">
+          <div className="text-xs uppercase text-gray-400">Total</div>
+          <div className="text-3xl font-bold">{deliveries.length}</div>
         </div>
-      )}
+        <div className="surface-card rounded-2xl p-4">
+          <div className="text-xs uppercase text-gray-400">In Progress</div>
+          <div className="text-3xl font-bold text-yellow-600">{inProgressCount}</div>
+        </div>
+        <div className="surface-card rounded-2xl p-4">
+          <div className="text-xs uppercase text-gray-400">Completed</div>
+          <div className="text-3xl font-bold text-green-600">{completedCount}</div>
+        </div>
+        <div className="surface-card rounded-2xl p-4">
+          <div className="text-xs uppercase text-gray-400">Route Savings</div>
+          <div className="text-3xl font-bold text-blue-600">{stats?.total_savings_percent.toFixed(1) ?? '0.0'}%</div>
+        </div>
+      </div>
 
-      <div className="overflow-x-auto rounded-lg border ">
+      <div className="overflow-x-auto rounded-lg border">
         <table className="min-w-full divide-y">
           <thead className="bg-gray-50">
             <tr>
@@ -74,37 +77,49 @@ export function RouteMonitor() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-transparent">
-            {deliveries.map((d) => (
-              <tr key={d.id}>
-                <td className="px-6 py-4 text-sm font-medium">#{d.id}</td>
+            {deliveries.map((delivery) => (
+              <tr key={delivery.id}>
+                <td className="px-6 py-4 text-sm font-medium">#{delivery.id}</td>
                 <td className="px-6 py-4 text-sm">
-                  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                    d.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                    d.status === 'IN_PROGRESS' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-gray-100 text-gray-800'
-                  }`}>
-                    {d.status}
+                  <span
+                    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                      delivery.status === 'COMPLETED'
+                        ? 'bg-green-100 text-green-800'
+                        : delivery.status === 'IN_PROGRESS'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-gray-100 text-gray-800'
+                    }`}
+                  >
+                    {delivery.status}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-sm">{d.stops?.length ?? 0}</td>
-                <td className="px-6 py-4 text-sm">{d.optimized_distance_km?.toFixed(1) ?? '-'} km</td>
-                <td className="px-6 py-4 text-sm space-x-2">
-                  {d.status === 'PLANNED' && (
-                    <button className="rounded bg-yellow-100 px-2 py-1 text-xs text-yellow-700 hover:bg-yellow-200" onClick={() => void advance(d.id, 'IN_PROGRESS')}>
+                <td className="px-6 py-4 text-sm">{delivery.stops?.length ?? 0}</td>
+                <td className="px-6 py-4 text-sm">{delivery.optimized_distance_km?.toFixed(1) ?? '-'} km</td>
+                <td className="space-x-2 px-6 py-4 text-sm">
+                  {delivery.status === 'PLANNED' ? (
+                    <button
+                      className="rounded bg-yellow-100 px-2 py-1 text-xs text-yellow-700 hover:bg-yellow-200"
+                      onClick={() => void advance(delivery.id, 'IN_PROGRESS')}
+                    >
                       Start
                     </button>
-                  )}
-                  {d.status === 'IN_PROGRESS' && (
-                    <button className="rounded bg-green-100 px-2 py-1 text-xs text-green-700 hover:bg-green-200" onClick={() => void advance(d.id, 'COMPLETED')}>
+                  ) : null}
+                  {delivery.status === 'IN_PROGRESS' ? (
+                    <button
+                      className="rounded bg-green-100 px-2 py-1 text-xs text-green-700 hover:bg-green-200"
+                      onClick={() => void advance(delivery.id, 'COMPLETED')}
+                    >
                       Complete
                     </button>
-                  )}
+                  ) : null}
                 </td>
               </tr>
             ))}
-            {deliveries.length === 0 && (
-              <tr><td colSpan={5} className="px-6 py-8 text-center text-gray-400">No deliveries found.</td></tr>
-            )}
+            {deliveries.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="px-6 py-8 text-center text-gray-400">No deliveries found.</td>
+              </tr>
+            ) : null}
           </tbody>
         </table>
       </div>

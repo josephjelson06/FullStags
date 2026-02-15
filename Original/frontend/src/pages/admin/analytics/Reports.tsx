@@ -10,8 +10,7 @@ import {
   type SupplierAnalytics,
 } from '@/services/api/analytics';
 
-const fmt = (v: number | null | undefined, digits = 1) =>
-  v == null ? '-' : v.toFixed(digits);
+const fmt = (value: number | null | undefined, digits = 1) => (value == null ? '-' : value.toFixed(digits));
 
 export function AdminReports() {
   const [kpis, setKpis] = useState<AnalyticsKpis | null>(null);
@@ -42,10 +41,16 @@ export function AdminReports() {
     }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    void load();
+  }, []);
 
-  if (loading) return <div className="text-center py-12 text-gray-400">Loading analyticsÃ¢â‚¬Â¦</div>;
-  if (error) return <div className="text-center py-12 text-red-500">{error}</div>;
+  if (loading) return <div className="py-12 text-center text-gray-400">Loading analytics...</div>;
+  if (error) return <div className="py-12 text-center text-red-500">{error}</div>;
+
+  const completedDeliveries = routes?.deliveries_by_status.find((row) => row.status === 'COMPLETED')?.count ?? 0;
+  const totalDeliveries = routes?.deliveries_by_status.reduce((acc, row) => acc + row.count, 0) ?? 0;
+  const deliveryCompletionRate = totalDeliveries > 0 ? (completedDeliveries / totalDeliveries) * 100 : 0;
 
   return (
     <div className="space-y-6">
@@ -59,65 +64,61 @@ export function AdminReports() {
         </button>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {[
           { label: 'Total Orders', value: kpis?.total_orders ?? '-' },
-          { label: 'Active Suppliers', value: kpis?.active_suppliers ?? '-' },
-          { label: 'Active Buyers', value: kpis?.active_buyers ?? '-' },
-          { label: 'Match Rate', value: `${fmt(kpis?.match_rate_percent)}%` },
-          { label: 'Avg Fulfillment', value: `${fmt(kpis?.avg_fulfillment_time_hours)}h` },
-          { label: 'Total Revenue', value: `Ã¢â€šÂ¹${fmt(kpis?.total_revenue, 0)}` },
-          { label: 'Delivery Completion', value: `${fmt(kpis?.delivery_completion_rate)}%` },
-          { label: 'Route Savings', value: `${fmt(kpis?.route_savings_percent)}%` },
+          { label: 'Open Orders', value: kpis?.open_orders ?? '-' },
+          { label: 'Delivered', value: kpis?.delivered_orders ?? '-' },
+          { label: 'Cancelled', value: kpis?.cancelled_orders ?? '-' },
+          { label: 'Active Deliveries', value: kpis?.active_deliveries ?? '-' },
+          { label: 'Avg Match Score', value: fmt(kpis?.avg_match_score, 2) },
+          { label: 'Delivery Completion', value: `${fmt(deliveryCompletionRate)}%` },
+          { label: 'Revenue', value: `INR ${fmt(kpis?.total_revenue_inr, 0)}` },
         ].map((card) => (
           <div key={card.label} className="surface-card rounded-2xl p-4">
-            <div className="text-xs text-gray-400 uppercase tracking-wide">{card.label}</div>
-            <div className="text-3xl font-bold mt-1">{card.value}</div>
+            <div className="text-xs uppercase tracking-wide text-gray-400">{card.label}</div>
+            <div className="mt-1 text-3xl font-bold">{card.value}</div>
           </div>
         ))}
       </div>
 
-      {/* Demand by Urgency */}
-      {demand && demand.by_urgency && (
+      {demand ? (
         <div className="surface-card rounded-2xl p-6">
-          <h2 className="text-lg font-semibold mb-4">Orders by Urgency</h2>
+          <h2 className="mb-4 text-lg font-semibold">Orders by Urgency</h2>
           <div className="grid grid-cols-3 gap-4">
             {demand.by_urgency.map((item) => (
-              <div key={item.urgency} className="text-center p-3 rounded-lg bg-gray-50">
+              <div key={item.urgency} className="rounded-lg bg-gray-50 p-3 text-center">
                 <div className="text-lg font-bold">{item.count}</div>
-                <div className="text-sm text-gray-400 capitalize">{item.urgency}</div>
+                <div className="text-sm capitalize text-gray-400">{item.urgency}</div>
               </div>
             ))}
           </div>
         </div>
-      )}
+      ) : null}
 
-      {/* Route Analytics */}
-      {routes && (
+      {routes ? (
         <div className="surface-card rounded-2xl p-6">
-          <h2 className="text-lg font-semibold mb-4">Route Optimization</h2>
+          <h2 className="mb-4 text-lg font-semibold">Route Optimization</h2>
           <div className="grid grid-cols-3 gap-4">
-            <div className="text-center p-3 rounded-lg bg-gray-50">
+            <div className="rounded-lg bg-gray-50 p-3 text-center">
               <div className="text-lg font-bold">{fmt(routes.total_distance_km)} km</div>
               <div className="text-sm text-gray-400">Total Distance</div>
             </div>
-            <div className="text-center p-3 rounded-lg bg-green-50 dark:bg-green-900/30">
-              <div className="text-lg font-bold text-green-700 dark:text-green-400">{fmt(routes.total_savings_km)} km</div>
+            <div className="rounded-lg bg-green-50 p-3 text-center">
+              <div className="text-lg font-bold text-green-700">{fmt(routes.total_savings_km)} km</div>
               <div className="text-sm text-gray-400">Savings</div>
             </div>
-            <div className="text-center p-3 rounded-lg bg-gray-50">
+            <div className="rounded-lg bg-gray-50 p-3 text-center">
               <div className="text-lg font-bold">{fmt(routes.avg_stops_per_delivery)}</div>
               <div className="text-sm text-gray-400">Avg Stops/Delivery</div>
             </div>
           </div>
         </div>
-      )}
+      ) : null}
 
-      {/* Top Suppliers */}
-      {suppliers && suppliers.top_suppliers && (
+      {suppliers ? (
         <div className="surface-card rounded-2xl p-6">
-          <h2 className="text-lg font-semibold mb-4">Top Suppliers</h2>
+          <h2 className="mb-4 text-lg font-semibold">Top Suppliers</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y">
               <thead>
@@ -129,19 +130,19 @@ export function AdminReports() {
                 </tr>
               </thead>
               <tbody className="divide-y">
-                {suppliers.top_suppliers.map((s) => (
-                  <tr key={s.supplier_id}>
-                    <td className="px-4 py-2 text-sm font-medium">{s.name}</td>
-                    <td className="px-4 py-2 text-sm">{s.orders_fulfilled}</td>
-                    <td className="px-4 py-2 text-sm">{fmt(s.reliability_score, 2)}</td>
-                    <td className="px-4 py-2 text-sm">{fmt(s.avg_lead_time)}h</td>
+                {suppliers.top_suppliers.map((supplier) => (
+                  <tr key={supplier.supplier_id}>
+                    <td className="px-4 py-2 text-sm font-medium">{supplier.name}</td>
+                    <td className="px-4 py-2 text-sm">{supplier.orders_fulfilled}</td>
+                    <td className="px-4 py-2 text-sm">{fmt(supplier.reliability_score, 2)}</td>
+                    <td className="px-4 py-2 text-sm">{fmt(supplier.avg_lead_time)}h</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

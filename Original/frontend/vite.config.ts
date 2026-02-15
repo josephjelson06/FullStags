@@ -9,6 +9,7 @@ export default defineConfig({
     host: '0.0.0.0',
     proxy: {
       '/api': 'http://localhost:8000',
+      '/ws': 'http://localhost:8000',
     },
   },
   plugins: [react(), tailwindcss()],

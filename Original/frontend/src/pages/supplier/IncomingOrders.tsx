@@ -5,6 +5,25 @@ import { Badge } from '@/components/Badge';
 import { useOrders } from '@/hooks/useOrders';
 import type { Order } from '@/types';
 
+function getProposedAssignmentId(order: Order): string | null {
+  for (const item of order.items) {
+    const assignment = item.assignments.find((row) => row.status === 'PROPOSED');
+    if (assignment) {
+      return String(assignment.id);
+    }
+  }
+  return null;
+}
+
+function getDispatchableItemId(order: Order): string | null {
+  const dispatchable = order.items.find((item) => item.status === 'CONFIRMED');
+  return dispatchable ? String(dispatchable.id) : null;
+}
+
+function isUrgencyVariant(value: unknown): value is 'critical' | 'high' | 'urgent' | 'standard' {
+  return value === 'critical' || value === 'high' || value === 'urgent' || value === 'standard';
+}
+
 export function IncomingOrders() {
   const { orders, loading, error, refetch, runAction } = useOrders('active');
 
@@ -19,7 +38,7 @@ export function IncomingOrders() {
     },
     {
       header: 'Urgency',
-      render: (row) => (row.urgency ? <Badge variant={row.urgency} /> : <span className="text-text-muted">--</span>),
+      render: (row) => (isUrgencyVariant(row.urgency) ? <Badge variant={row.urgency} /> : <span className="text-text-muted">--</span>),
     },
     {
       header: 'Distance',
@@ -30,36 +49,26 @@ export function IncomingOrders() {
       ),
     },
     {
-      header: 'Accept Window',
-      render: (row) =>
-        row.status === 'pending_acceptance' ? (
-          <span className="font-semibold" style={{ color: 'var(--color-warning)' }}>
-            {row.acceptDeadlineMinutes?.toFixed(1) ?? 0} min
-          </span>
-        ) : (
-          <span className="text-text-muted">--</span>
-        ),
-    },
-    {
       header: 'Actions',
       render: (row) => {
-        if (row.status === 'pending_acceptance') {
+        const proposedAssignmentId = getProposedAssignmentId(row);
+        if (row.status === 'MATCHED' && proposedAssignmentId) {
           return (
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => void runAction(row.orderId, 'accept')}
+                onClick={() => void runAction(row.orderId, 'accept', proposedAssignmentId)}
                 className="rounded-lg px-3 py-1.5 text-xs font-semibold shadow-sm transition-all hover:shadow-md"
                 style={{
                   background: 'linear-gradient(135deg, var(--color-success), #15803d)',
                   color: '#ffffff',
                 }}
               >
-                ✓ Accept
+                Accept
               </button>
               <button
                 type="button"
-                onClick={() => void runAction(row.orderId, 'decline')}
+                onClick={() => void runAction(row.orderId, 'decline', proposedAssignmentId)}
                 className="rounded-lg px-3 py-1.5 text-xs font-semibold transition-all hover:shadow-xs"
                 style={{
                   background: 'var(--color-danger-bg)',
@@ -67,21 +76,22 @@ export function IncomingOrders() {
                   border: '1px solid var(--color-danger)',
                 }}
               >
-                ✕ Decline
+                Decline
               </button>
             </div>
           );
         }
 
-        if (row.status === 'picking') {
+        const dispatchableItemId = getDispatchableItemId(row);
+        if (row.status === 'CONFIRMED' && dispatchableItemId) {
           return (
             <button
               type="button"
-              onClick={() => void runAction(row.orderId, 'ready')}
+              onClick={() => void runAction(row.orderId, 'ready', dispatchableItemId)}
               className="rounded-lg px-3 py-1.5 text-xs font-semibold shadow-sm transition-all hover:shadow-md"
               style={{ background: 'var(--gradient-primary)', color: 'var(--color-text-on-primary)' }}
             >
-              📦 Ready for Pickup
+              Ready for Pickup
             </button>
           );
         }
@@ -95,7 +105,7 @@ export function IncomingOrders() {
     <section className="space-y-5">
       <PageHeader
         title="Incoming Orders"
-        subtitle="Accept or decline urgent orders, then mark parts ready for courier pickup."
+        subtitle="Accept matched assignments and mark confirmed items as dispatched."
       />
 
       {error ? <ErrorBanner message={error} onRetry={() => void refetch()} /> : null}
@@ -106,7 +116,7 @@ export function IncomingOrders() {
         rowKey={(row) => row.orderId}
         loading={loading}
         emptyTitle="No incoming supplier orders"
-        emptyDescription="New urgent requests assigned to your warehouse will appear here."
+        emptyDescription="New backend-matched assignments will appear here."
       />
     </section>
   );

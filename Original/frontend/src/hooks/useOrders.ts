@@ -1,6 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { getOrders, updateOrder } from '@/services/api';
+import {
+  confirmOrderAssignment,
+  getOrder,
+  getOrders,
+  rejectOrderAssignment,
+  transitionItemStatus,
+  transitionOrderStatus,
+} from '@/services/api';
 import type { Order, OrderAction } from '@/types';
 
 interface UseOrdersResult {
@@ -33,7 +40,32 @@ export function useOrders(status?: string): UseOrdersResult {
     async (orderId: string, action: OrderAction, matchId?: string) => {
       setError(null);
       try {
-        await updateOrder(orderId, action, matchId);
+        if (action === 'accept') {
+          if (!matchId) {
+            throw new Error('Assignment id is required to accept.');
+          }
+          await confirmOrderAssignment(Number(matchId));
+        } else if (action === 'decline') {
+          if (!matchId) {
+            throw new Error('Assignment id is required to decline.');
+          }
+          await rejectOrderAssignment(Number(matchId));
+        } else if (action === 'ready') {
+          if (!matchId) {
+            throw new Error('Order item id is required to dispatch.');
+          }
+          await transitionItemStatus(Number(matchId), 'DISPATCHED');
+        } else if (action === 'delivered') {
+          await transitionOrderStatus(orderId, 'DELIVERED');
+        } else if (action === 'cancel') {
+          await transitionOrderStatus(orderId, 'CANCELLED');
+        } else {
+          throw new Error(`Unsupported action: ${action}`);
+        }
+
+        if (action === 'accept' || action === 'decline') {
+          await getOrder(orderId);
+        }
         await fetchOrders();
       } catch (actionError) {
         setError(actionError instanceof Error ? actionError.message : 'Failed to update order');

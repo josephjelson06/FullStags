@@ -18,7 +18,7 @@ export function BuyerDashboard() {
   }, []);
 
   const total = orders.length;
-  const active = orders.filter(o => ['PLACED', 'MATCHED', 'IN_DELIVERY'].includes(o.status)).length;
+  const active = orders.filter(o => ['PLACED', 'MATCHED', 'CONFIRMED', 'DISPATCHED', 'IN_TRANSIT'].includes(o.status)).length;
   const delivered = orders.filter(o => o.status === 'DELIVERED').length;
   const critical = orders.filter(o => o.urgency === 'critical').length;
 
@@ -80,7 +80,7 @@ export function BuyerDashboard() {
                   o.status === 'CANCELLED' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
                   'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
                 }`}>{o.status}</span>
-                <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{new Date(o.created_at).toLocaleDateString()}</span>
+                <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{new Date(o.created_at ?? Date.now()).toLocaleDateString()}</span>
               </div>
             </div>
           ))}

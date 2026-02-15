@@ -1,4 +1,4 @@
-export { login, register } from '@/services/api/auth';
+export { login, me, registerBuyer, registerSupplier } from '@/services/api/auth';
 export {
   createOrder,
   getMatches,
@@ -6,13 +6,23 @@ export {
   getOrder,
   getRoute,
   getOrders,
+  getOrdersEnvelope,
+  transitionOrderStatus,
+  transitionItemStatus,
+  confirmOrderAssignment,
+  rejectOrderAssignment,
 } from '@/services/api/orders';
 export {
   getInventory,
+  getInventoryCatalog,
   addInventoryItem,
   updateInventoryItem,
   deleteInventoryItem,
   updatePickTime,
+  uploadCatalogCsv,
+  getLowStockCatalog,
+  listPartCategories,
+  getCatalogTransactions,
 } from '@/services/api/inventory';
 export { getDashboard } from '@/services/api/admin';
 

@@ -14,6 +14,9 @@ export function SignupPage() {
   const [name, setName] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [role, setRole] = useState<UserRole>('buyer');
+  const [industryType, setIndustryType] = useState('');
+  const [gstNumber, setGstNumber] = useState('');
+  const [serviceRadiusKm, setServiceRadiusKm] = useState('100');
   const [address, setAddress] = useState('1400 Industrial Blvd, Chicago, IL');
   const [lat, setLat] = useState('41.8781');
   const [lng, setLng] = useState('-87.6298');
@@ -41,9 +44,12 @@ export function SignupPage() {
       const registeredUser = await register({
         email,
         password,
-        name,
-        role,
+        displayName: name,
+        role: role === 'admin' ? 'buyer' : role,
         companyName,
+        industryType: role === 'buyer' ? industryType : undefined,
+        gstNumber: role === 'supplier' ? gstNumber : undefined,
+        serviceRadiusKm: role === 'supplier' ? Number(serviceRadiusKm) : undefined,
         location: { lat: latitude, lng: longitude, address },
       });
       navigate(getRoleHomePath(registeredUser.role), { replace: true });
@@ -109,6 +115,23 @@ export function SignupPage() {
                 <option value="supplier">Supplier</option>
               </select>
             </div>
+            {role === 'buyer' ? (
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-text-primary" htmlFor="signup-industry">Industry Type</label>
+                <input id="signup-industry" className="w-full" value={industryType} onChange={(e) => setIndustryType(e.target.value)} />
+              </div>
+            ) : (
+              <>
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-text-primary" htmlFor="signup-gst">GST Number</label>
+                  <input id="signup-gst" className="w-full" value={gstNumber} onChange={(e) => setGstNumber(e.target.value)} />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-text-primary" htmlFor="signup-radius">Service Radius (km)</label>
+                  <input id="signup-radius" type="number" min="1" className="w-full" value={serviceRadiusKm} onChange={(e) => setServiceRadiusKm(e.target.value)} />
+                </div>
+              </>
+            )}
             <div>
               <label className="mb-1.5 block text-sm font-medium text-text-primary" htmlFor="signup-address">Address</label>
               <input id="signup-address" className="w-full" value={address} onChange={(e) => setAddress(e.target.value)} required />

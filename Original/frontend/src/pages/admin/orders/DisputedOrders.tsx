@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
 import { request } from '@/services/api/client';
+import type { OrdersListDto } from '@/services/api/contracts';
 
-interface OrderRow { id: number; status: string; urgency: string; created_at: string; buyer_name?: string; total_items?: number; }
+interface OrderRow {
+  id: number;
+  status: string;
+  urgency: string;
+  created_at: string | null;
+}
 
 export function DisputedOrders() {
   const [orders, setOrders] = useState<OrderRow[]>([]);
@@ -10,30 +16,26 @@ export function DisputedOrders() {
   useEffect(() => {
     const load = async () => {
       try {
-        const all = await request<OrderRow[]>('/api/orders');
-        setOrders(all.filter(o => ['DISPUTED', 'CANCELLED'].includes(o.status)));
-      } finally { setLoading(false); }
+        const response = await request<OrdersListDto>('/api/orders?page_size=200');
+        setOrders(response.items.filter((order) => order.status === 'CANCELLED'));
+      } finally {
+        setLoading(false);
+      }
     };
-    load();
+    void load();
   }, []);
 
-  const resolve = async (id: number, status: string) => {
-    await request(`/api/orders/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) });
-    setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o));
-  };
-
-  if (loading) return <div className="text-center py-12 text-gray-400">Loading...</div>;
+  if (loading) return <div className="py-12 text-center text-gray-400">Loading...</div>;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Disputed & Cancelled Orders</h1>
+      <h1 className="text-3xl font-bold">Cancelled Orders</h1>
       {orders.length === 0 ? (
-        <div className="text-center py-12 text-gray-400">
-          <div className="text-4xl mb-2">ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦</div>
-          <p>No disputed or cancelled orders.</p>
+        <div className="py-12 text-center text-gray-400">
+          <p>No cancelled orders.</p>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-lg border ">
+        <div className="overflow-x-auto rounded-lg border">
           <table className="min-w-full divide-y">
             <thead className="bg-gray-50">
               <tr>
@@ -41,26 +43,19 @@ export function DisputedOrders() {
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Status</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Urgency</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-400">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-transparent">
-              {orders.map(o => (
-                <tr key={o.id}>
-                  <td className="px-6 py-4 text-sm font-medium">#{o.id}</td>
+              {orders.map((order) => (
+                <tr key={order.id}>
+                  <td className="px-6 py-4 text-sm font-medium">#{order.id}</td>
                   <td className="px-6 py-4 text-sm">
-                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${o.status === 'DISPUTED' ? 'bg-orange-100 text-orange-800' : 'bg-red-100 text-red-800'}`}>{o.status}</span>
+                    <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800">
+                      {order.status}
+                    </span>
                   </td>
-                  <td className="px-6 py-4 text-sm capitalize">{o.urgency}</td>
-                  <td className="px-6 py-4 text-sm text-gray-400">{new Date(o.created_at).toLocaleDateString()}</td>
-                  <td className="px-6 py-4 text-sm space-x-2">
-                    {o.status === 'DISPUTED' && (
-                      <>
-                        <button className="rounded bg-green-100 px-2 py-1 text-xs text-green-700 hover:bg-green-200" onClick={() => void resolve(o.id, 'MATCHED')}>Resolve</button>
-                        <button className="rounded bg-red-100 px-2 py-1 text-xs text-red-700 hover:bg-red-200" onClick={() => void resolve(o.id, 'CANCELLED')}>Cancel</button>
-                      </>
-                    )}
-                  </td>
+                  <td className="px-6 py-4 text-sm capitalize">{order.urgency}</td>
+                  <td className="px-6 py-4 text-sm text-gray-400">{order.created_at ? new Date(order.created_at).toLocaleDateString() : '-'}</td>
                 </tr>
               ))}
             </tbody>

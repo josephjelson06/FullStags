@@ -64,17 +64,14 @@ export function RouteMap({
 
           <Polyline positions={line} pathOptions={{ color: '#2563eb', weight: 4 }} />
 
-          {/* @ts-expect-error -- react-leaflet Marker icon prop typing is incomplete for DivIcon */}
           <Marker position={[supplierLocation.lat, supplierLocation.lng]} icon={pinIcon('#2563eb')}>
             <Popup>Supplier</Popup>
           </Marker>
 
-          {/* @ts-expect-error -- react-leaflet Marker icon prop typing is incomplete for DivIcon */}
           <Marker position={[factoryLocation.lat, factoryLocation.lng]} icon={pinIcon('#ef4444')}>
             <Popup>Factory</Popup>
           </Marker>
 
-          {/* @ts-expect-error -- react-leaflet Marker icon prop typing is incomplete for DivIcon */}
           <Marker position={[courierLocation.lat, courierLocation.lng]} icon={pinIcon('#f59e0b')}>
             <Popup>Courier</Popup>
           </Marker>

@@ -5,17 +5,17 @@ import { useAuth } from '@/hooks/useAuth';
 import { getRoleHomePath } from '@/utils/routes';
 
 const DEMO_ACCOUNTS = [
-  { role: 'Buyer', email: 'buyer@factory.com', password: 'password123', color: 'var(--color-role-buyer)' },
-  { role: 'Supplier', email: 'supplier@parts.com', password: 'password123', color: 'var(--color-role-supplier)' },
-  { role: 'Admin', email: 'admin@urgentparts.com', password: 'password123', color: 'var(--color-role-admin)' },
+  { role: 'Buyer', email: 'buyer.mumbai@sparehub.in', password: 'buyer123', color: 'var(--color-role-buyer)' },
+  { role: 'Supplier', email: 'supplier.thane@sparehub.in', password: 'supplier123', color: 'var(--color-role-supplier)' },
+  { role: 'Admin', email: 'admin@sparehub.in', password: 'admin123', color: 'var(--color-role-admin)' },
 ] as const;
 
 export function LoginPage() {
   const navigate = useNavigate();
   const { user, isAuthenticated, login } = useAuth();
 
-  const [email, setEmail] = useState('buyer@factory.com');
-  const [password, setPassword] = useState('password123');
+  const [email, setEmail] = useState('buyer.mumbai@sparehub.in');
+  const [password, setPassword] = useState('buyer123');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

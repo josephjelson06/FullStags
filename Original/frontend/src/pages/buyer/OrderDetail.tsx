@@ -9,28 +9,32 @@ import { RouteMap } from '@/components/RouteMap';
 import { useAuth } from '@/hooks/useAuth';
 import { useRoute } from '@/hooks/useRoute';
 import { getOrder, updateOrder } from '@/services/api';
-import type { Order, OrderStatus, UserRole } from '@/types';
+import type { BackendOrderStatus, Order, UserRole } from '@/types';
 
-const STATUS_FLOW: OrderStatus[] = [
-  'matching',
-  'pending_acceptance',
-  'picking',
-  'courier_to_supplier',
-  'courier_to_factory',
-  'delivered',
+const STATUS_FLOW: BackendOrderStatus[] = [
+  'PLACED',
+  'MATCHED',
+  'CONFIRMED',
+  'DISPATCHED',
+  'IN_TRANSIT',
+  'DELIVERED',
 ];
 
 const STATUS_LABELS: Record<string, string> = {
-  matching: 'Matching',
-  pending_acceptance: 'Pending',
-  picking: 'Picking',
-  courier_to_supplier: 'To Supplier',
-  courier_to_factory: 'To Factory',
-  delivered: 'Delivered',
+  PLACED: 'Placed',
+  MATCHED: 'Matched',
+  CONFIRMED: 'Confirmed',
+  DISPATCHED: 'Dispatched',
+  IN_TRANSIT: 'In Transit',
+  DELIVERED: 'Delivered',
 };
 
 function canMarkDelivered(role: UserRole, order: Order): boolean {
-  return (role === 'buyer' || role === 'admin') && order.status === 'courier_to_factory';
+  return (role === 'buyer' || role === 'admin') && order.status === 'IN_TRANSIT';
+}
+
+function isUrgencyVariant(value: unknown): value is 'critical' | 'high' | 'urgent' | 'standard' {
+  return value === 'critical' || value === 'high' || value === 'urgent' || value === 'standard';
 }
 
 export function OrderDetail() {
@@ -109,7 +113,7 @@ export function OrderDetail() {
       <article className="surface-card rounded-2xl p-5 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant={order.status} />
-          {order.urgency ? <Badge variant={order.urgency} /> : null}
+          {isUrgencyVariant(order.urgency) ? <Badge variant={order.urgency} /> : null}
         </div>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-3">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getInventory } from '@/services/api/inventory';
 import { getOrders } from '@/services/api/orders';
-import { useNavigate } from 'react-router-dom';
 
 export function SupplierDashboard() {
   const navigate = useNavigate();
@@ -11,22 +11,23 @@ export function SupplierDashboard() {
   useEffect(() => {
     const load = async () => {
       try {
-        const [inv, orders] = await Promise.all([getInventory(), getOrders()]);
-        const items = ((inv as unknown) as { items?: { quantity_in_stock: number }[] }).items ?? [];
-        const orderArr = orders as unknown as { status: string }[];
+        const [inventory, orders] = await Promise.all([getInventory(), getOrders()]);
         setStats({
-          totalParts: items.length,
-          lowStock: items.filter(i => i.quantity_in_stock <= 5).length,
-          orders: orderArr.length,
-          pending: orderArr.filter(o => ['PLACED', 'MATCHED'].includes(o.status)).length,
+          totalParts: inventory.items.length,
+          lowStock: inventory.items.filter((item) => item.quantity <= Math.max(5, item.minOrderQuantity ?? 0)).length,
+          orders: orders.length,
+          pending: orders.filter((order) => ['PLACED', 'MATCHED', 'CONFIRMED'].includes(order.status)).length,
         });
-      } catch { /* empty */ }
-      finally { setLoading(false); }
+      } catch {
+        setStats({ totalParts: 0, lowStock: 0, orders: 0, pending: 0 });
+      } finally {
+        setLoading(false);
+      }
     };
-    load();
+    void load();
   }, []);
 
-  if (loading) return <div className="text-center py-12" style={{ color: 'var(--color-text-muted)' }}>Loading dashboard...</div>;
+  if (loading) return <div className="py-12 text-center" style={{ color: 'var(--color-text-muted)' }}>Loading dashboard...</div>;
 
   const cards = [
     { label: 'Catalog Items', value: stats.totalParts, color: 'var(--color-info)', link: '/supplier/inventory' },
@@ -39,16 +40,16 @@ export function SupplierDashboard() {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold" style={{ color: 'var(--color-text-primary)' }}>Supplier Dashboard</h1>
 
-      <div className="stagger-children grid grid-cols-2 md:grid-cols-4 gap-4">
-        {cards.map(card => (
+      <div className="stagger-children grid grid-cols-2 gap-4 md:grid-cols-4">
+        {cards.map((card) => (
           <div
             key={card.label}
-            className="surface-card rounded-2xl p-5 cursor-pointer transition-all hover:shadow-md"
+            className="surface-card cursor-pointer rounded-2xl p-5 transition-all hover:shadow-md"
             style={{ borderLeft: `4px solid ${card.color}` }}
             onClick={() => navigate(card.link)}
           >
             <div className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>{card.label}</div>
-            <div className="text-3xl font-bold mt-2" style={{ color: card.color }}>{card.value}</div>
+            <div className="mt-2 text-3xl font-bold" style={{ color: card.color }}>{card.value}</div>
           </div>
         ))}
       </div>
@@ -59,7 +60,7 @@ export function SupplierDashboard() {
           className="surface-card rounded-2xl border-2 border-dashed p-6 text-center transition-all hover:shadow-md"
           style={{ borderColor: 'var(--color-border)' }}
         >
-          <div className="text-2xl mb-1">➕</div>
+          <div className="mb-1 text-2xl">+</div>
           <div className="font-medium" style={{ color: 'var(--color-text-primary)' }}>Add New Part</div>
         </button>
         <button
@@ -67,7 +68,7 @@ export function SupplierDashboard() {
           className="surface-card rounded-2xl border-2 border-dashed p-6 text-center transition-all hover:shadow-md"
           style={{ borderColor: 'var(--color-border)' }}
         >
-          <div className="text-2xl mb-1">📤</div>
+          <div className="mb-1 text-2xl">#</div>
           <div className="font-medium" style={{ color: 'var(--color-text-primary)' }}>Bulk CSV Upload</div>
         </button>
       </div>

@@ -12,6 +12,7 @@ interface BadgeProps {
 const colorMap: Record<BadgeVariant, { bg: string; text: string; border: string; dot?: string }> = {
   critical:              { bg: 'bg-critical-bg',              text: 'text-critical',              border: 'border-critical/20',              dot: 'bg-critical' },
   high:                  { bg: 'bg-high-bg',                  text: 'text-high',                  border: 'border-high/20',                  dot: 'bg-high' },
+  urgent:                { bg: 'bg-high-bg',                  text: 'text-high',                  border: 'border-high/20',                  dot: 'bg-high' },
   standard:              { bg: 'bg-standard-bg',              text: 'text-standard',              border: 'border-standard/20' },
   matching:              { bg: 'bg-matching-bg',              text: 'text-matching',              border: 'border-matching/20',              dot: 'bg-matching' },
   pending_acceptance:    { bg: 'bg-pending-acceptance-bg',    text: 'text-pending-acceptance',    border: 'border-pending-acceptance/20',    dot: 'bg-pending-acceptance' },
@@ -19,13 +20,31 @@ const colorMap: Record<BadgeVariant, { bg: string; text: string; border: string;
   courier_to_supplier:   { bg: 'bg-courier-to-supplier-bg',   text: 'text-courier-to-supplier',   border: 'border-courier-to-supplier/20',   dot: 'bg-courier-to-supplier' },
   courier_to_factory:    { bg: 'bg-courier-to-factory-bg',    text: 'text-courier-to-factory',    border: 'border-courier-to-factory/20',    dot: 'bg-courier-to-factory' },
   delivered:             { bg: 'bg-delivered-bg',              text: 'text-delivered',              border: 'border-delivered/20' },
+  PLACED:                { bg: 'bg-matching-bg',              text: 'text-matching',              border: 'border-matching/20',              dot: 'bg-matching' },
+  MATCHED:               { bg: 'bg-pending-acceptance-bg',    text: 'text-pending-acceptance',    border: 'border-pending-acceptance/20',    dot: 'bg-pending-acceptance' },
+  CONFIRMED:             { bg: 'bg-picking-bg',               text: 'text-picking',               border: 'border-picking/20',               dot: 'bg-picking' },
+  DISPATCHED:            { bg: 'bg-courier-to-supplier-bg',   text: 'text-courier-to-supplier',   border: 'border-courier-to-supplier/20',   dot: 'bg-courier-to-supplier' },
+  IN_TRANSIT:            { bg: 'bg-courier-to-factory-bg',    text: 'text-courier-to-factory',    border: 'border-courier-to-factory/20',    dot: 'bg-courier-to-factory' },
+  DELIVERED:             { bg: 'bg-delivered-bg',             text: 'text-delivered',             border: 'border-delivered/20' },
+  CANCELLED:             { bg: 'bg-critical-bg',              text: 'text-critical',              border: 'border-critical/20' },
   fastest:               { bg: 'bg-delivered-bg',              text: 'text-delivered',              border: 'border-delivered/20' },
   buyer:                 { bg: 'bg-role-buyer-bg',             text: 'text-role-buyer',             border: 'border-role-buyer/20' },
   supplier:              { bg: 'bg-role-supplier-bg',          text: 'text-role-supplier',          border: 'border-role-supplier/20' },
   admin:                 { bg: 'bg-role-admin-bg',             text: 'text-role-admin',             border: 'border-role-admin/20' },
 };
 
-const ACTIVE_STATUSES = new Set<string>(['matching', 'pending_acceptance', 'picking', 'courier_to_supplier', 'courier_to_factory']);
+const ACTIVE_STATUSES = new Set<string>([
+  'matching',
+  'pending_acceptance',
+  'picking',
+  'courier_to_supplier',
+  'courier_to_factory',
+  'PLACED',
+  'MATCHED',
+  'CONFIRMED',
+  'DISPATCHED',
+  'IN_TRANSIT',
+]);
 
 function prettyLabel(value: string): string {
   return value.replace(/_/g, ' ');
