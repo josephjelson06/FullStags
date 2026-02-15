@@ -1,3 +1,7 @@
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from urllib.parse import parse_qs
 
 import socketio
